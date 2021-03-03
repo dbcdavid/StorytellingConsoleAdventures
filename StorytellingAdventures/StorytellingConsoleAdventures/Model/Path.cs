@@ -20,5 +20,19 @@ namespace StorytellingConsoleAdventures.Model
             this.location1 = location1;
             this.location2 = location2;
         }
+
+        public Location GetDestination(Location from)
+        {
+            if (from == location1 && from != location2)
+            {
+                return location2;
+            }
+            else if (from != location1 && from == location2)
+            {
+                return location1;
+            }
+
+            return null;
+        }
     }
 }

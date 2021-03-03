@@ -9,7 +9,6 @@ namespace StorytellingConsoleAdventures
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
             ScreenController.GoToFullScreen();
             GameLoop();
             Console.ReadLine();
@@ -17,24 +16,27 @@ namespace StorytellingConsoleAdventures
 
         static void GameLoop()
         {
-            InitializeTestScenario();
-            string actionLine = "";
-            string[] tokens = null;
+            World world = InitializeTestScenario();
+            Player player = world.PlayerCharacter;
+            string commandLine = "";
+            string[] commandTokens = null;
+            string message = "";
 
-            while (actionLine != "exit")
+            while (commandLine != "exit")
             {
-                Console.WriteLine("Player is at: " + player);
-                actionLine = Console.ReadLine();
-                bool isValid = Parser.ParseAction(actionLine, ref tokens);
+                Console.WriteLine("Player is at: " + player.CurrentLocation.Name);
+                commandLine = Console.ReadLine();
+                bool isValid = Parser.ParseAction(commandLine, ref commandTokens);
 
                 if (isValid)
                 {
-                    ExecuteAction(tokens);
+                    world.ExecuteAction(commandTokens, ref message);
+                    Console.WriteLine(message);
                 }
             }
         }
 
-        static void InitializeTestScenario()
+        static World InitializeTestScenario()
         {
             Location a1 = new Location("a1");
             Location a2 = new Location("a2");
@@ -68,40 +70,55 @@ namespace StorytellingConsoleAdventures
 
             Path c2c3 = new Path(c2, c3);
 
-            a1.East = a1a2;
-            a1.South = a1b1;
+            a1.EastPath = a1a2;
+            a1.SouthPath = a1b1;
 
-            a2.East = a2a3;
-            a2.West = a1a2;
-            a2.South = a2b2;
+            a2.EastPath = a2a3;
+            a2.WestPath = a1a2;
+            a2.SouthPath = a2b2;
 
-            a3.West = a2a3;
-            a3.South = a3b3;
+            a3.WestPath = a2a3;
+            a3.SouthPath = a3b3;
 
-            b1.North = a1b1;
-            b1.East = b1b2;
-            b1.South = b1c1;
+            b1.NorthPath = a1b1;
+            b1.EastPath = b1b2;
+            b1.SouthPath = b1c1;
 
-            b2.North = a2b2;
-            b2.East = b2b3;
-            b2.West = b1b2;
-            b2.South = b2c2;
+            b2.NorthPath = a2b2;
+            b2.EastPath = b2b3;
+            b2.WestPath = b1b2;
+            b2.SouthPath = b2c2;
 
-            b3.North = a3b3;
-            b3.West = b2b3;
-            b3.South = b3c3;
+            b3.NorthPath = a3b3;
+            b3.WestPath = b2b3;
+            b3.SouthPath = b3c3;
 
-            c1.East = c1c2;
-            c1.North = b1c1;
+            c1.EastPath = c1c2;
+            c1.NorthPath = b1c1;
 
-            c2.East = c2c3;
-            c2.West = c1c2;
-            c2.North = b2c2;
+            c2.EastPath = c2c3;
+            c2.WestPath = c1c2;
+            c2.NorthPath = b2c2;
 
-            c3.West = c2c3;
-            c3.North = b3c3;
+            c3.WestPath = c2c3;
+            c3.NorthPath = b3c3;
 
             Player player = new Player(3, a1);
+
+            World world = new World(player);
+            world.AddLocation(a1);
+            world.AddLocation(a2);
+            world.AddLocation(a3);
+
+            world.AddLocation(b1);
+            world.AddLocation(b2);
+            world.AddLocation(b3);
+
+            world.AddLocation(c1);
+            world.AddLocation(c2);
+            world.AddLocation(c3);
+
+            return world;
         }
     }
 }

@@ -10,6 +10,11 @@ namespace StorytellingConsoleAdventures.Model
      */ 
     class Location
     {
+        public enum Direction
+        {
+            NORTH, SOUTH, EAST, WEST
+        };
+
         private string name = "";
         private Path north = null;
         private Path south = null;
@@ -21,7 +26,38 @@ namespace StorytellingConsoleAdventures.Model
             this.name = name;
         }
 
-        public Path North
+        public Location GetDirection(Direction direction)
+        {
+            Location destination = null;
+            if (direction == Direction.NORTH && north != null)
+            {
+                destination = north.GetDestination(this);
+            }
+            else if (direction == Direction.SOUTH && south != null)
+            {
+                destination = south.GetDestination(this);
+            }
+            else if (direction == Direction.EAST && east != null)
+            {
+                destination = east.GetDestination(this);
+            }
+            else if (direction == Direction.WEST && west != null)
+            {
+                destination = west.GetDestination(this);
+            }
+
+            return destination;
+        }
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+        }
+
+        public Path NorthPath
         {
             set
             {
@@ -34,7 +70,7 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
-        public Path South
+        public Path SouthPath
         {
             set
             {
@@ -47,7 +83,7 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
-        public Path West
+        public Path WestPath
         {
             set
             {
@@ -60,7 +96,7 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
-        public Path East
+        public Path EastPath
         {
             set
             {
