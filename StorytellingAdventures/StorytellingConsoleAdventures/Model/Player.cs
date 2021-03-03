@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace StorytellingConsoleAdventures.Model
+{
+    /*
+     * Player is the class that describes the relevant attributes of the player character
+     * It contains the player's current life points, current location and the items he is carrying
+     */
+    class Player
+    {
+        private int lifePoints = 0;
+        private Location location = null;
+        private List<Item> items = null;
+
+        public Player (int lifePoints, Location location)
+        {
+            this.lifePoints = lifePoints;
+            this.location = location;
+            items = new List<Item>();
+        }
+
+        public Location CurrentLocation
+        {
+            get
+            {
+                return location;
+            }
+
+            set
+            {
+                location = value;
+            }
+        }
+
+    }
+}
