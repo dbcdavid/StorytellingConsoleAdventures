@@ -18,21 +18,41 @@ namespace StorytellingConsoleAdventures
         {
             World world = InitializeTestScenario();
             Player player = world.PlayerCharacter;
+            Monster monster = world.MonsterCharacter;
             string commandLine = "";
             string[] commandTokens = null;
             string message = "";
+            int playerActionCount = 0;
 
             while (commandLine != "exit")
             {
                 Console.WriteLine("Player is at: " + player.CurrentLocation.Name);
                 commandLine = Console.ReadLine();
-                bool isValid = Parser.ParseAction(commandLine, ref commandTokens);
+                bool isValid = Parser.ParseAction("player " + commandLine, ref commandTokens);
 
                 if (isValid)
                 {
-                    world.ExecuteAction(commandTokens, ref message);
+                    bool executed = world.ExecuteAction(commandTokens, ref message);
                     Console.WriteLine(message);
+
+                    if (executed)
+                    {
+                        playerActionCount++;
+
+                        if (playerActionCount >= 2)
+                        {
+                            commandTokens = monster.GetNextAction();
+                            if (commandTokens[1] != string.Empty)
+                            {
+                                world.ExecuteAction(commandTokens, ref message);
+                                Console.WriteLine(message);
+                            }
+                            playerActionCount = 0;
+                        }
+                    }
                 }
+
+                Console.WriteLine();
             }
         }
 
@@ -103,7 +123,7 @@ namespace StorytellingConsoleAdventures
             c3.WestPath = c2c3;
             c3.NorthPath = b3c3;
 
-            Player player = new Player(3, a1);
+            Player player = new Player("Player", 3, a1);
 
             World world = new World(player);
             world.AddLocation(a1);
@@ -117,6 +137,9 @@ namespace StorytellingConsoleAdventures
             world.AddLocation(c1);
             world.AddLocation(c2);
             world.AddLocation(c3);
+
+            Monster monster = new Monster("Monster", c3, world, Monster.Planning.CHASE);
+            world.MonsterCharacter = monster;
 
             return world;
         }

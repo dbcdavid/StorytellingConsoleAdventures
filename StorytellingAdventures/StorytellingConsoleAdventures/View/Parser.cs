@@ -10,13 +10,14 @@ namespace StorytellingConsoleAdventures.View
         {
             string[] lineTokens = line.Split(" ");
 
-            if (lineTokens.Length > 0)
+            if (lineTokens.Length > 1)
             {
-                string actionName = lineTokens[0].ToLower();
+                string actor = lineTokens[0].ToLower();
+                string actionName = lineTokens[1].ToLower();
 
                 if (actionName.Equals("north") || actionName.Equals("south") || actionName.Equals("west") || actionName.Equals("east"))
                 {
-                    if (lineTokens.Length > 1)
+                    if (lineTokens.Length > 2)
                     {
                         return false;
                     }

@@ -49,6 +49,30 @@ namespace StorytellingConsoleAdventures.Model
             return destination;
         }
 
+        public List<string> GetPossibleDirections()
+        {
+            List<string> possibilities = new List<string>();
+
+            if (north != null)
+            {
+                possibilities.Add("north");
+            }
+            if (south != null)
+            {
+                possibilities.Add("south");
+            }
+            if (east != null)
+            {
+                possibilities.Add("east");
+            }
+            if (west != null)
+            {
+                possibilities.Add("west");
+            }
+
+            return possibilities;
+        }
+
         public string Name
         {
             get

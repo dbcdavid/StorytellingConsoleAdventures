@@ -10,6 +10,7 @@ namespace StorytellingConsoleAdventures.Model
         private List<Location> map = null;
         private List<Item> items = null;
         private Player player = null;
+        private Monster monster = null;
 
         public World(Player player)
         {
@@ -36,52 +37,84 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
+        public Monster MonsterCharacter
+        {
+            set
+            {
+                monster = value;
+            }
+
+            get
+            {
+                return monster;
+            }
+        }
+
         public bool ExecuteAction(string[] actionDescription, ref string message)
         {
             bool result = false;
-            if (actionDescription.Length > 0)
+            if (actionDescription.Length > 1)
             {
-                string actionName = actionDescription[0];
-                if (actionName.Equals("north") || actionName.Equals("south") || actionName.Equals("east") || actionName.Equals("west"))
+                string actor = actionDescription[0];
+                string actionName = actionDescription[1];
+                Entity entity = null;
+
+                if (actor.Equals("player"))
                 {
-                    result = MovePlayer(actionName, ref message);
+                    entity = player;
+                }
+                else if (actor.Equals("monster"))
+                {
+                    entity = monster;
+                }
+
+                if (entity != null)
+                {
+                    if (actionName.Equals("north") || actionName.Equals("south") || actionName.Equals("east") || actionName.Equals("west"))
+                    {
+                        result = MoveEntity(entity, actionName, ref message);
+                    }
                 }
             }
 
             return result;
         }
 
-        private bool MovePlayer(string direction, ref string message)
+        private bool MoveEntity(Entity entity, string direction, ref string message)
         {
-            Location playerLocation = player.CurrentLocation;
+            Location entityLocation = entity.CurrentLocation;
             Location destination = null;
             switch (direction) {
                 case "north":
-                    destination = playerLocation.GetDirection(Location.Direction.NORTH);
+                    destination = entityLocation.GetDirection(Location.Direction.NORTH);
                     break;
                 case "south":
-                    destination = playerLocation.GetDirection(Location.Direction.SOUTH);
+                    destination = entityLocation.GetDirection(Location.Direction.SOUTH);
                     break;
                 case "east":
-                    destination = playerLocation.GetDirection(Location.Direction.EAST);
+                    destination = entityLocation.GetDirection(Location.Direction.EAST);
                     break;
                 case "west":
-                    destination = playerLocation.GetDirection(Location.Direction.WEST);
+                    destination = entityLocation.GetDirection(Location.Direction.WEST);
                     break;
             }
 
             if (destination != null)
             {
                 message = Messages.MOVEMESSAGE;
-                message = message.Replace("%from", player.CurrentLocation.Name);
-                message = message.Replace("%to", destination.Name);
 
-                player.CurrentLocation = destination;
+                message = message.Replace("%entity", entity.Name);
+                message = message.Replace("%from", entity.CurrentLocation.Name);
+                message = message.Replace("%to", destination.Name);
+                entity.CurrentLocation = destination;
+
                 return true;
             }
 
             message = Messages.MOVEFAILMESSAGE;
+            message = message.Replace("%entity", entity.Name);
             message = message.Replace("%direction", direction);
+
             return false;
         }
     }
