@@ -20,10 +20,62 @@ namespace StorytellingConsoleAdventures.Model
         private Path south = null;
         private Path west = null;
         private Path east = null;
+        private List<Item> items = null;
 
         public Location(string name)
         {
             this.name = name;
+            items = new List<Item>();
+        }
+
+        public bool AddItem(Item newItem)
+        {
+            foreach (Item item in items)
+            {
+                if (item.Name.Equals(newItem.Name))
+                {
+                    return false;
+                }
+            }
+
+            items.Add(newItem);
+            return true;
+        }
+
+        public bool RemoveItem(string itemName)
+        {
+            foreach(Item item in items)
+            {
+                if (item.Name.ToLower().Equals(itemName))
+                {
+                    items.Remove(item);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsNear(Location location)
+        {
+            if (north != null && north.GetDestination(this) == location)
+            {
+                return true;
+            }
+            if (south != null && south.GetDestination(this) == location)
+            {
+                return true;
+            }
+            if (east != null && east.GetDestination(this) == location)
+            {
+                return true;
+            }
+            if (west != null && west.GetDestination(this) == location)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public Location GetDirection(Direction direction)
@@ -130,6 +182,14 @@ namespace StorytellingConsoleAdventures.Model
             get
             {
                 return east;
+            }
+        }
+
+        public List<Item> Items
+        {
+            get
+            {
+                return items;
             }
         }
     }

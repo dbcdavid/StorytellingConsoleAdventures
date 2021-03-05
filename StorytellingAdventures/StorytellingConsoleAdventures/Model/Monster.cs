@@ -16,21 +16,29 @@ namespace StorytellingConsoleAdventures.Model
         private Planning planning = Planning.RANDOM;
         private Random rnd = new Random();
 
-        public Monster(string name, Location location, World knowledge, Planning planning)
+        public Monster(string name, int lifePoints, Location location, World knowledge, Planning planning)
         {
             this.name = name;
             this.location = location;
+            this.lifePoints = lifePoints;
             this.knowledge = knowledge;
             this.planning = planning;
+            items = new List<Item>();
         }
 
-        public string[] GetNextAction()
+        public bool GetNextAction(ref string[] actionTokens)
         {
-            string[] actionTokens = new string[2];
-            actionTokens[0] = "monster";
-            actionTokens[1] = Think();
+            actionTokens = new string[1];
+            actionTokens[0] = Think();
 
-            return actionTokens;
+            if (actionTokens[0] == string.Empty)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         private string Think()

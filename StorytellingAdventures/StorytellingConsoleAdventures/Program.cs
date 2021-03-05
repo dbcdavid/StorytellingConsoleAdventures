@@ -7,6 +7,8 @@ namespace StorytellingConsoleAdventures
 {
     class Program
     {
+        private static bool debug = true;
+
         static void Main(string[] args)
         {
             ScreenController.GoToFullScreen();
@@ -24,28 +26,96 @@ namespace StorytellingConsoleAdventures
             string message = "";
             int playerActionCount = 0;
 
-            while (commandLine != "exit")
+            while (commandLine != Commands.EXIT)
             {
-                Console.WriteLine("Player is at: " + player.CurrentLocation.Name);
-                commandLine = Console.ReadLine();
-                bool isValid = Parser.ParseAction("player " + commandLine, ref commandTokens);
+                bool isPlayerNearMonster = World.CheckEntityProximity(player, monster);
+                bool isPlayerWithMonster = player.CurrentLocation == monster.CurrentLocation;
+
+                if (isPlayerNearMonster)
+                {
+                    Console.WriteLine(Messages.PLAYERNEARMONSTER);
+                }
+                else if (isPlayerWithMonster)
+                {
+                    Console.WriteLine(Messages.PLAYERWITHMONSTER);
+                }
+
+                if (debug)
+                {
+                    Console.WriteLine("Player is at: " + player.CurrentLocation.Name);
+                }
+
+                commandLine = Console.ReadLine().ToLower();
+                bool isValid = Parser.ParseAction(commandLine, ref commandTokens);
 
                 if (isValid)
                 {
-                    bool executed = world.ExecuteAction(commandTokens, ref message);
+                    bool executed = world.ExecuteAction(player, commandTokens, ref message);
                     Console.WriteLine(message);
 
                     if (executed)
                     {
                         playerActionCount++;
 
+                        if (!monster.IsAlive())
+                        {
+                            bool continueGame = HandleSuccess();
+                            if (continueGame)
+                            {
+                                world = InitializeTestScenario();
+                                player = world.PlayerCharacter;
+                                monster = world.MonsterCharacter;
+                                commandLine = "";
+                                commandTokens = null;
+                                message = "";
+                                playerActionCount = 0;
+
+                                continue;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+
+                        if (isPlayerWithMonster)
+                        {
+                            player.LoseLife();
+
+                            if (!player.IsAlive())
+                            {
+                                bool continueGame = HandleGameOver();
+
+                                if (continueGame)
+                                {
+                                    world = InitializeTestScenario();
+                                    player = world.PlayerCharacter;
+                                    monster = world.MonsterCharacter;
+                                    commandLine = "";
+                                    commandTokens = null;
+                                    message = "";
+                                    playerActionCount = 0;
+
+                                    continue;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+
                         if (playerActionCount >= 2)
                         {
-                            commandTokens = monster.GetNextAction();
-                            if (commandTokens[1] != string.Empty)
+                            bool hasAction = monster.GetNextAction(ref commandTokens);
+                            if (hasAction)
                             {
-                                world.ExecuteAction(commandTokens, ref message);
-                                Console.WriteLine(message);
+                                world.ExecuteAction(monster, commandTokens, ref message);
+
+                                if (debug)
+                                {
+                                    Console.WriteLine(message);
+                                }
                             }
                             playerActionCount = 0;
                         }
@@ -54,6 +124,59 @@ namespace StorytellingConsoleAdventures
 
                 Console.WriteLine();
             }
+        }
+
+        static bool HandleGameOver()
+        {
+            string response = string.Empty;
+            Console.WriteLine(Messages.GAMEOVERMESSAGE);
+            Console.WriteLine(Messages.CONTINUEQUESTION);
+
+            while (response != Commands.AFIRMATIVE && response != Commands.AFIRMATIVECOMPLETE &&
+                   response != Commands.NEGATIVE && response != Commands.NEGATIVECOMPLETE) {
+                response = Console.ReadLine();
+            }
+
+            if (response == Commands.AFIRMATIVE || response == Commands.AFIRMATIVECOMPLETE)
+            {
+                Console.WriteLine(Messages.CONTINUEMESSAGE);
+                return true;
+            }
+
+            if (response == Commands.NEGATIVE || response == Commands.NEGATIVECOMPLETE)
+            {
+                Console.WriteLine(Messages.NOTCONTINUEMESSAGE);
+                return false;
+            }
+
+            return false;
+        }
+
+        static bool HandleSuccess()
+        {
+            string response = string.Empty;
+            Console.WriteLine(Messages.SUCCESSMESSAGE);
+            Console.WriteLine(Messages.PLAYAGAINQUESTION);
+
+            while (response != Commands.AFIRMATIVE && response != Commands.AFIRMATIVECOMPLETE &&
+                   response != Commands.NEGATIVE && response != Commands.NEGATIVECOMPLETE)
+            {
+                response = Console.ReadLine();
+            }
+
+            if (response == Commands.AFIRMATIVE || response == Commands.AFIRMATIVECOMPLETE)
+            {
+                Console.WriteLine(Messages.REPLAYMESSAGE);
+                return true;
+            }
+
+            if (response == Commands.NEGATIVE || response == Commands.NEGATIVECOMPLETE)
+            {
+                Console.WriteLine(Messages.NOTCONTINUEMESSAGE);
+                return false;
+            }
+
+            return false;
         }
 
         static World InitializeTestScenario()
@@ -138,8 +261,12 @@ namespace StorytellingConsoleAdventures
             world.AddLocation(c2);
             world.AddLocation(c3);
 
-            Monster monster = new Monster("Monster", c3, world, Monster.Planning.CHASE);
+            Monster monster = new Monster("Monster", 5, c3, world, Monster.Planning.CHASE);
             world.MonsterCharacter = monster;
+
+            Item sword = new Item("Sword", "Kill");
+            a2.AddItem(sword);
+            world.AddItem(sword);
 
             return world;
         }

@@ -10,9 +10,6 @@ namespace StorytellingConsoleAdventures.Model
      */
     class Player : Entity
     {
-        private int lifePoints = 0;
-        private List<Item> items = null;
-
         public Player (string name, int lifePoints, Location location)
         {
             this.name = name;
@@ -20,6 +17,5 @@ namespace StorytellingConsoleAdventures.Model
             this.location = location;
             items = new List<Item>();
         }
-
     }
 }

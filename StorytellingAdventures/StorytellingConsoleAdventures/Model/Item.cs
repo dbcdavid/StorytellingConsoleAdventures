@@ -16,24 +16,61 @@ namespace StorytellingConsoleAdventures.Model
     {
         private string name = "";
         private string effect = "";
-        private string[] effectParameters;
-        private Location location = null;
 
-        public string Use()
+        public Item(string name, string effect)
         {
-            bool result = false;
+            this.name = name;
+            this.effect = effect;
+        }
+
+        public bool Use(Object[] parameters, ref string message)
+        {
             try
             {
                 Type thisType = this.GetType();
                 MethodInfo theMethod = thisType.GetMethod(effect);
-                //string returnMessage = theMethod.Invoke(this, effectParameters);
-                //return returnMessage;
-            }catch (Exception ex)
-            {
-                return Messages.NOUSEMESSAGE;
-            }
+                message = (string)theMethod.Invoke(this, parameters);
 
-            return String.Empty;
+                if (message.Length > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    message = name + " " + Messages.NOUSEMESSAGE;
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                message = name + " " + Messages.NOUSEMESSAGE;
+                return false;
+            }
+        }
+
+        public string Kill(Object actorObject, Object location, Object targetObject)
+        {
+            Entity actor = (Entity)actorObject;
+            Entity target = (Entity)targetObject;
+            
+            if (actor.CurrentLocation == target.CurrentLocation)
+            {
+                target.Die();
+                string message = actor.Name + " attacked " + target.Name + " with the " + name;
+                return message;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
         }
     }
 }
