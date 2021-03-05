@@ -11,12 +11,26 @@ namespace StorytellingConsoleAdventures.Model
         private List<Item> items = null;
         private Player player = null;
         private Monster monster = null;
+        private int playerActionCount = 0;
+        private int maxActionCount = 2;
 
         public World(Player player)
         {
             this.player = player;
             items = new List<Item>();
             map = new List<Location>();
+        }
+
+        public bool IncreasePlayerActionCount()
+        {
+            playerActionCount = (playerActionCount + 1) % maxActionCount;
+
+            if (playerActionCount == 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public bool AddLocation(Location newLocation)

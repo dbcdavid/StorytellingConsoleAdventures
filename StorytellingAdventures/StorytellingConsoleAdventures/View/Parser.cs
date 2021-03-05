@@ -65,6 +65,32 @@ namespace StorytellingConsoleAdventures.View
                         return true;
                     }
                 }
+
+                else if (actionName.Equals(Commands.SAVE))
+                {
+                    if (lineTokens.Length != 1)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        tokens = lineTokens;
+                        return true;
+                    }
+                }
+
+                else if (actionName.Equals(Commands.LOAD))
+                {
+                    if (lineTokens.Length != 1)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        tokens = lineTokens;
+                        return true;
+                    }
+                }
             }
 
             return false;

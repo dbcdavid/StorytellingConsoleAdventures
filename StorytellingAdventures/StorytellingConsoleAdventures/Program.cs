@@ -24,7 +24,6 @@ namespace StorytellingConsoleAdventures
             string commandLine = "";
             string[] commandTokens = null;
             string message = "";
-            int playerActionCount = 0;
 
             while (commandLine != Commands.EXIT)
             {
@@ -48,6 +47,26 @@ namespace StorytellingConsoleAdventures
                 commandLine = Console.ReadLine().ToLower();
                 bool isValid = Parser.ParseAction(commandLine, ref commandTokens);
 
+                if (commandTokens[0].Equals(Commands.SAVE))
+                {
+                    SaveController.Save(world);
+                    continue;
+                }
+                else if (commandTokens[0].Equals(Commands.LOAD))
+                {
+                    bool loaded = SaveController.Load(world);
+                    if (loaded)
+                    {
+                        player = world.PlayerCharacter;
+                        monster = world.MonsterCharacter;
+                        commandLine = "";
+                        commandTokens = null;
+                        message = "";
+                    }
+
+                    continue;
+                }
+
                 if (isValid)
                 {
                     bool executed = world.ExecuteAction(player, commandTokens, ref message);
@@ -55,7 +74,7 @@ namespace StorytellingConsoleAdventures
 
                     if (executed)
                     {
-                        playerActionCount++;
+                        bool reachedMonsterTurn = world.IncreasePlayerActionCount();
 
                         if (!monster.IsAlive())
                         {
@@ -68,7 +87,6 @@ namespace StorytellingConsoleAdventures
                                 commandLine = "";
                                 commandTokens = null;
                                 message = "";
-                                playerActionCount = 0;
 
                                 continue;
                             }
@@ -94,7 +112,6 @@ namespace StorytellingConsoleAdventures
                                     commandLine = "";
                                     commandTokens = null;
                                     message = "";
-                                    playerActionCount = 0;
 
                                     continue;
                                 }
@@ -105,7 +122,7 @@ namespace StorytellingConsoleAdventures
                             }
                         }
 
-                        if (playerActionCount >= 2)
+                        if (reachedMonsterTurn)
                         {
                             bool hasAction = monster.GetNextAction(ref commandTokens);
                             if (hasAction)
@@ -117,7 +134,6 @@ namespace StorytellingConsoleAdventures
                                     Console.WriteLine(message);
                                 }
                             }
-                            playerActionCount = 0;
                         }
                     }
                 }

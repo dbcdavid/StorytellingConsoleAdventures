@@ -28,7 +28,12 @@ namespace StorytellingConsoleAdventures.View
 
         public static string GOTITEMMESSAGE = "got";
         public static string DIDNOTGOTITEMMESSAGE = "can't get";
-
         public static string HASNOITEM = "doesn't have";
+
+        public static string SAVESUCCESSFUL = "SAVED SUCCESSUFULLY";
+        public static string SAVEFAILED = "SAVE FAILED";
+        public static string LOADSUCCESSFUL = "LOADED SUCCESSUFULLY";
+        public static string LOADFAILED = "LOAD FAILED";
+
     }
 }

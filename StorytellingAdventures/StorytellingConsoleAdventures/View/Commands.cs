@@ -14,5 +14,7 @@ namespace StorytellingConsoleAdventures.View
         public static string USE = "use";
         public static string SEARCH = "search";
         public static string GET = "get";
+        public static string SAVE = "save";
+        public static string LOAD = "load";
     }
 }
