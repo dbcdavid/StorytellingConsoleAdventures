@@ -78,6 +78,29 @@ namespace StorytellingConsoleAdventures.Model
             return false;
         }
 
+        public Path GetPath(Direction direction)
+        {
+            Path path = null;
+            if (direction == Direction.NORTH)
+            {
+                path = north;
+            }
+            else if (direction == Direction.SOUTH)
+            {
+                path = south;
+            }
+            else if (direction == Direction.EAST)
+            {
+                path = east;
+            }
+            else if (direction == Direction.WEST)
+            {
+                path = west;
+            }
+
+            return path;
+        }
+
         public Location GetDirection(Direction direction)
         {
             Location destination = null;
@@ -123,6 +146,28 @@ namespace StorytellingConsoleAdventures.Model
             }
 
             return possibilities;
+        }
+
+        public bool HasObstacle(Obstacle obstacle)
+        {
+            if (north != null && north.HasObstacle(obstacle))
+            {
+                return true;
+            }
+            if (south != null && south.HasObstacle(obstacle))
+            {
+                return true;
+            }
+            if (east != null && east.HasObstacle(obstacle))
+            {
+                return true;
+            }
+            if (west != null && west.HasObstacle(obstacle))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public string Name

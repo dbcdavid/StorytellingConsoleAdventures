@@ -163,14 +163,13 @@ namespace StorytellingConsoleAdventures.Model
                             Item item = GetItem(itemName);
                             Object[] parameters = new Object[3];
                             parameters[0] = actor;
-                            parameters[1] = actor.CurrentLocation;
                             if (actor == player)
                             {
-                                parameters[2] = monster;
+                                parameters[1] = monster;
                             }
                             else
                             {
-                                parameters[2] = player;
+                                parameters[1] = player;
                             }
 
                             bool used = item.Use(parameters, ref message);
@@ -191,32 +190,45 @@ namespace StorytellingConsoleAdventures.Model
         private bool MoveEntity(Entity entity, string direction, ref string message)
         {
             Location entityLocation = entity.CurrentLocation;
+            Path path = null;
             Location destination = null;
+            Obstacle obstacle = null;
             switch (direction) {
                 case "north":
-                    destination = entityLocation.GetDirection(Location.Direction.NORTH);
+                    path = entityLocation.GetPath(Location.Direction.NORTH);
                     break;
                 case "south":
-                    destination = entityLocation.GetDirection(Location.Direction.SOUTH);
+                    path = entityLocation.GetPath(Location.Direction.SOUTH);
                     break;
                 case "east":
-                    destination = entityLocation.GetDirection(Location.Direction.EAST);
+                    path = entityLocation.GetPath(Location.Direction.EAST);
                     break;
                 case "west":
-                    destination = entityLocation.GetDirection(Location.Direction.WEST);
+                    path = entityLocation.GetPath(Location.Direction.WEST);
                     break;
             }
 
-            if (destination != null)
+            if (path != null)
             {
-                message = Messages.MOVEMESSAGE;
+                if (!path.HasUnsolvedObstacle())
+                {
+                    destination = path.GetDestination(entityLocation);
+                    message = Messages.MOVEMESSAGE;
 
-                message = message.Replace("%entity", entity.Name);
-                message = message.Replace("%from", entity.CurrentLocation.Name);
-                message = message.Replace("%to", destination.Name);
-                entity.CurrentLocation = destination;
+                    message = message.Replace("%entity", entity.Name);
+                    message = message.Replace("%from", entityLocation.Name);
+                    message = message.Replace("%to", destination.Name);
+                    entity.CurrentLocation = destination;
 
-                return true;
+                    return true;
+                }
+                else
+                {
+                    obstacle = path.PathObstacle;
+                    message = "A " + obstacle.Condition + " " + obstacle.Name + " blocks your way";
+
+                    return false;
+                }
             }
 
             message = Messages.MOVEFAILMESSAGE;

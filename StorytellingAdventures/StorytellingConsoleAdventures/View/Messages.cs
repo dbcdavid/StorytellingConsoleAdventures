@@ -35,5 +35,8 @@ namespace StorytellingConsoleAdventures.View
         public static string LOADSUCCESSFUL = "LOADED SUCCESSUFULLY";
         public static string LOADFAILED = "LOAD FAILED";
 
+        public static string ATTACKVERB = "attacked";
+        public static string UNLOCKVERB = "unlocked";
+
     }
 }

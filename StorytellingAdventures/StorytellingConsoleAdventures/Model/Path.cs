@@ -34,5 +34,38 @@ namespace StorytellingConsoleAdventures.Model
 
             return null;
         }
+
+        public bool HasObstacle(Obstacle obstacle)
+        {
+            if (this.obstacle != null && this.obstacle == obstacle)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool HasUnsolvedObstacle()
+        {
+            if (obstacle != null && !obstacle.Solved)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public Obstacle PathObstacle
+        {
+            get
+            {
+                return obstacle;
+            }
+
+            set
+            {
+                obstacle = value;
+            }
+        }
     }
 }

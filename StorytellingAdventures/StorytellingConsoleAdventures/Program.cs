@@ -213,15 +213,11 @@ namespace StorytellingConsoleAdventures
             Path a1b1 = new Path(a1, b1);
 
             Path a2a3 = new Path(a2, a3);
-            Path a2b2 = new Path(a2, b2);
 
             Path a3b3 = new Path(a3, b3);
 
             Path b1b2 = new Path(b1, b2);
             Path b1c1 = new Path(b1, c1);
-
-            Path b2b3 = new Path(b2, b3);
-            Path b2c2 = new Path(b2, c2);
 
             Path b3c3 = new Path(b3, c3);
 
@@ -234,7 +230,6 @@ namespace StorytellingConsoleAdventures
 
             a2.EastPath = a2a3;
             a2.WestPath = a1a2;
-            a2.SouthPath = a2b2;
 
             a3.WestPath = a2a3;
             a3.SouthPath = a3b3;
@@ -243,13 +238,9 @@ namespace StorytellingConsoleAdventures
             b1.EastPath = b1b2;
             b1.SouthPath = b1c1;
 
-            b2.NorthPath = a2b2;
-            b2.EastPath = b2b3;
             b2.WestPath = b1b2;
-            b2.SouthPath = b2c2;
 
             b3.NorthPath = a3b3;
-            b3.WestPath = b2b3;
             b3.SouthPath = b3c3;
 
             c1.EastPath = c1c2;
@@ -257,7 +248,6 @@ namespace StorytellingConsoleAdventures
 
             c2.EastPath = c2c3;
             c2.WestPath = c1c2;
-            c2.NorthPath = b2c2;
 
             c3.WestPath = c2c3;
             c3.NorthPath = b3c3;
@@ -280,10 +270,16 @@ namespace StorytellingConsoleAdventures
             Monster monster = new Monster("Monster", 5, c3, world, Monster.Planning.CHASE);
             world.MonsterCharacter = monster;
 
-            Item sword = new Item("Sword", "Kill");
-            a2.AddItem(sword);
+            Item sword = new Item("Sword", "Attack");
+            b2.AddItem(sword);
             world.AddItem(sword);
 
+            Item key = new Item("Key", "Unlock");
+            b1.AddItem(key);
+            world.AddItem(key);
+
+            Obstacle door = new Obstacle("door", "locked", false, key);
+            b1b2.PathObstacle = door;
             return world;
         }
     }

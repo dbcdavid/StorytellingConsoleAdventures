@@ -48,7 +48,7 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
-        public string Kill(Object actorObject, Object location, Object targetObject)
+        public string Attack(Object actorObject, Object targetObject)
         {
             Entity actor = (Entity)actorObject;
             Entity target = (Entity)targetObject;
@@ -56,7 +56,24 @@ namespace StorytellingConsoleAdventures.Model
             if (actor.CurrentLocation == target.CurrentLocation)
             {
                 target.Die();
-                string message = actor.Name + " attacked " + target.Name + " with the " + name;
+                string message = actor.Name + " " + Messages.ATTACKVERB + " the " + target.Name;
+                return message;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        public string Unlock(Object actorObject, Object targetObject)
+        {
+            Entity actor = (Entity)actorObject;
+            Obstacle obstacle = (Obstacle)targetObject;
+            Location location = actor.CurrentLocation;
+            if (location.HasObstacle(obstacle) && obstacle.Solve(this))
+            {
+                obstacle.Condition = Messages.UNLOCKVERB;
+                string message = actor.Name + " " + Messages.UNLOCKVERB + " the " + obstacle.Name;
                 return message;
             }
             else
