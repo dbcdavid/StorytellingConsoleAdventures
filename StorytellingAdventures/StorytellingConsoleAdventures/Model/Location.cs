@@ -10,22 +10,15 @@ namespace StorytellingConsoleAdventures.Model
      */ 
     class Location
     {
-        public enum Direction
-        {
-            NORTH, SOUTH, EAST, WEST
-        };
-
+        private Dictionary<string, Path> paths;
         private string name = "";
-        private Path north = null;
-        private Path south = null;
-        private Path west = null;
-        private Path east = null;
         private List<Item> items = null;
 
         public Location(string name)
         {
             this.name = name;
             items = new List<Item>();
+            paths = new Dictionary<string, Path>();
         }
 
         public bool AddItem(Item newItem)
@@ -58,67 +51,36 @@ namespace StorytellingConsoleAdventures.Model
 
         public bool IsNear(Location location)
         {
-            if (north != null && north.GetDestination(this) == location)
+            foreach (KeyValuePair<string, Path> path in paths)
             {
-                return true;
-            }
-            if (south != null && south.GetDestination(this) == location)
-            {
-                return true;
-            }
-            if (east != null && east.GetDestination(this) == location)
-            {
-                return true;
-            }
-            if (west != null && west.GetDestination(this) == location)
-            {
-                return true;
+                if (path.Value.GetDestination(this) == location)
+                {
+                    return true;
+                }
             }
 
             return false;
         }
 
-        public Path GetPath(Direction direction)
+        public Path GetPath(string direction)
         {
             Path path = null;
-            if (direction == Direction.NORTH)
+
+            if (paths.ContainsKey(direction))
             {
-                path = north;
-            }
-            else if (direction == Direction.SOUTH)
-            {
-                path = south;
-            }
-            else if (direction == Direction.EAST)
-            {
-                path = east;
-            }
-            else if (direction == Direction.WEST)
-            {
-                path = west;
+                path = paths[direction];
             }
 
             return path;
         }
 
-        public Location GetDirection(Direction direction)
+        public Location GetDestination(string direction)
         {
             Location destination = null;
-            if (direction == Direction.NORTH && north != null)
+
+            if (paths.ContainsKey(direction))
             {
-                destination = north.GetDestination(this);
-            }
-            else if (direction == Direction.SOUTH && south != null)
-            {
-                destination = south.GetDestination(this);
-            }
-            else if (direction == Direction.EAST && east != null)
-            {
-                destination = east.GetDestination(this);
-            }
-            else if (direction == Direction.WEST && west != null)
-            {
-                destination = west.GetDestination(this);
+                destination = paths[direction].GetDestination(this);
             }
 
             return destination;
@@ -126,44 +88,45 @@ namespace StorytellingConsoleAdventures.Model
 
         public List<string> GetPossibleDirections()
         {
-            List<string> possibilities = new List<string>();
-
-            if (north != null)
-            {
-                possibilities.Add("north");
-            }
-            if (south != null)
-            {
-                possibilities.Add("south");
-            }
-            if (east != null)
-            {
-                possibilities.Add("east");
-            }
-            if (west != null)
-            {
-                possibilities.Add("west");
-            }
+            List<string> possibilities = new List<string>(paths.Keys);
 
             return possibilities;
         }
 
+        public List<Obstacle> GetObstacles()
+        {
+            List<Obstacle> obstacles = new List<Obstacle>();
+
+            foreach (KeyValuePair<string, Path> path in paths)
+            {
+                if (path.Value.HasObstacle())
+                {
+                    obstacles.Add(path.Value.PathObstacle);
+                }
+            }
+
+            return obstacles;
+        }
+
         public bool HasObstacle(Obstacle obstacle)
         {
-            if (north != null && north.HasObstacle(obstacle))
+            foreach (KeyValuePair<string, Path> path in paths)
             {
-                return true;
+                if (path.Value.HasObstacle())
+                {
+                    return true;
+                }
             }
-            if (south != null && south.HasObstacle(obstacle))
+
+            return false;
+        }
+
+        public bool AddPath(string direction, Path path)
+        {
+            if (!paths.ContainsKey(direction))
             {
-                return true;
-            }
-            if (east != null && east.HasObstacle(obstacle))
-            {
-                return true;
-            }
-            if (west != null && west.HasObstacle(obstacle))
-            {
+                paths.Add(direction, path);
+
                 return true;
             }
 
@@ -175,58 +138,6 @@ namespace StorytellingConsoleAdventures.Model
             get
             {
                 return name;
-            }
-        }
-
-        public Path NorthPath
-        {
-            set
-            {
-                north = value;
-            }
-
-            get
-            {
-                return north;
-            }
-        }
-
-        public Path SouthPath
-        {
-            set
-            {
-                south = value;
-            }
-
-            get
-            {
-                return south;
-            }
-        }
-
-        public Path WestPath
-        {
-            set
-            {
-                west = value;
-            }
-
-            get
-            {
-                return west;
-            }
-        }
-
-        public Path EastPath
-        {
-            set
-            {
-                east = value;
-            }
-
-            get
-            {
-                return east;
             }
         }
 

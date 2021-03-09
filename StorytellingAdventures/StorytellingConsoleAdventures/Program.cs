@@ -225,32 +225,32 @@ namespace StorytellingConsoleAdventures
 
             Path c2c3 = new Path(c2, c3);
 
-            a1.EastPath = a1a2;
-            a1.SouthPath = a1b1;
+            a1.AddPath(Commands.EAST, a1a2);
+            a1.AddPath(Commands.SOUTH, a1b1);
 
-            a2.EastPath = a2a3;
-            a2.WestPath = a1a2;
+            a2.AddPath(Commands.EAST, a2a3);
+            a2.AddPath(Commands.WEST, a1a2);
 
-            a3.WestPath = a2a3;
-            a3.SouthPath = a3b3;
+            a3.AddPath(Commands.WEST, a2a3);
+            a3.AddPath(Commands.SOUTH, a3b3);
 
-            b1.NorthPath = a1b1;
-            b1.EastPath = b1b2;
-            b1.SouthPath = b1c1;
+            b1.AddPath(Commands.NORTH, a1b1);
+            b1.AddPath(Commands.EAST, b1b2);
+            b1.AddPath(Commands.SOUTH, b1c1);
 
-            b2.WestPath = b1b2;
+            b2.AddPath(Commands.WEST, b1b2);
 
-            b3.NorthPath = a3b3;
-            b3.SouthPath = b3c3;
+            b3.AddPath(Commands.NORTH, a3b3);
+            b3.AddPath(Commands.SOUTH, b3c3);
 
-            c1.EastPath = c1c2;
-            c1.NorthPath = b1c1;
+            c1.AddPath(Commands.EAST, c1c2);
+            c1.AddPath(Commands.NORTH, b1c1);
 
-            c2.EastPath = c2c3;
-            c2.WestPath = c1c2;
+            c2.AddPath(Commands.EAST, c2c3);
+            c2.AddPath(Commands.WEST, c1c2);
 
-            c3.WestPath = c2c3;
-            c3.NorthPath = b3c3;
+            c3.AddPath(Commands.WEST, c2c3);
+            c3.AddPath(Commands.NORTH, b3c3);
 
             Player player = new Player("Player", 3, a1);
 

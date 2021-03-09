@@ -14,7 +14,7 @@ namespace StorytellingConsoleAdventures.View
             {
                 string actionName = lineTokens[0].ToLower();
 
-                if (actionName.Equals("north") || actionName.Equals("south") || actionName.Equals("west") || actionName.Equals("east"))
+                if (actionName.Equals(Commands.NORTH) || actionName.Equals(Commands.SOUTH) || actionName.Equals(Commands.WEST) || actionName.Equals(Commands.EAST))
                 {
                     if (lineTokens.Length > 1)
                     {

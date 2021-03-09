@@ -48,10 +48,10 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
-        public string Attack(Object actorObject, Object targetObject)
+        public string Attack(Object actorObject, Object targetEntity)
         {
             Entity actor = (Entity)actorObject;
-            Entity target = (Entity)targetObject;
+            Entity target = (Entity)targetEntity;
             
             if (actor.CurrentLocation == target.CurrentLocation)
             {
@@ -65,21 +65,23 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
-        public string Unlock(Object actorObject, Object targetObject)
+        public string Unlock(Object actorObject, Object targetEntity)
         {
             Entity actor = (Entity)actorObject;
-            Obstacle obstacle = (Obstacle)targetObject;
             Location location = actor.CurrentLocation;
-            if (location.HasObstacle(obstacle) && obstacle.Solve(this))
+            List<Obstacle> obstacles = location.GetObstacles();
+
+            foreach (Obstacle obstacle in obstacles)
             {
-                obstacle.Condition = Messages.UNLOCKVERB;
-                string message = actor.Name + " " + Messages.UNLOCKVERB + " the " + obstacle.Name;
-                return message;
+                if (obstacle.Solve(this))
+                {
+                    obstacle.Condition = Messages.UNLOCKVERB;
+                    string message = actor.Name + " " + Messages.UNLOCKVERB + " the " + obstacle.Name;
+                    return message;
+                }
             }
-            else
-            {
-                return string.Empty;
-            }
+            
+            return string.Empty;
         }
 
         public string Name

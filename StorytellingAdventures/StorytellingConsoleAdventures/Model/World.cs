@@ -114,7 +114,7 @@ namespace StorytellingConsoleAdventures.Model
 
                 if (actor != null)
                 {
-                    if (actionName.Equals("north") || actionName.Equals("south") || actionName.Equals("east") || actionName.Equals("west"))
+                    if (actionName.Equals(Commands.NORTH) || actionName.Equals(Commands.SOUTH) || actionName.Equals(Commands.EAST) || actionName.Equals(Commands.WEST))
                     {
                         result = MoveEntity(actor, actionName, ref message);
                     }
@@ -161,7 +161,7 @@ namespace StorytellingConsoleAdventures.Model
                         if (actor.HasItem(itemName))
                         {
                             Item item = GetItem(itemName);
-                            Object[] parameters = new Object[3];
+                            Object[] parameters = new Object[2];
                             parameters[0] = actor;
                             if (actor == player)
                             {
@@ -190,29 +190,13 @@ namespace StorytellingConsoleAdventures.Model
         private bool MoveEntity(Entity entity, string direction, ref string message)
         {
             Location entityLocation = entity.CurrentLocation;
-            Path path = null;
-            Location destination = null;
-            Obstacle obstacle = null;
-            switch (direction) {
-                case "north":
-                    path = entityLocation.GetPath(Location.Direction.NORTH);
-                    break;
-                case "south":
-                    path = entityLocation.GetPath(Location.Direction.SOUTH);
-                    break;
-                case "east":
-                    path = entityLocation.GetPath(Location.Direction.EAST);
-                    break;
-                case "west":
-                    path = entityLocation.GetPath(Location.Direction.WEST);
-                    break;
-            }
+            Path path = entityLocation.GetPath(direction);
 
             if (path != null)
             {
                 if (!path.HasUnsolvedObstacle())
                 {
-                    destination = path.GetDestination(entityLocation);
+                    Location destination = path.GetDestination(entityLocation);
                     message = Messages.MOVEMESSAGE;
 
                     message = message.Replace("%entity", entity.Name);
@@ -224,7 +208,7 @@ namespace StorytellingConsoleAdventures.Model
                 }
                 else
                 {
-                    obstacle = path.PathObstacle;
+                    Obstacle obstacle = path.PathObstacle;
                     message = "A " + obstacle.Condition + " " + obstacle.Name + " blocks your way";
 
                     return false;

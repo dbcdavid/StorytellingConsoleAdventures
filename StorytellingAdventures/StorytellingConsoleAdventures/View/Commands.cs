@@ -16,5 +16,9 @@ namespace StorytellingConsoleAdventures.View
         public static string GET = "get";
         public static string SAVE = "save";
         public static string LOAD = "load";
+        public static string NORTH = "north";
+        public static string SOUTH = "south";
+        public static string EAST = "east";
+        public static string WEST = "west";
     }
 }

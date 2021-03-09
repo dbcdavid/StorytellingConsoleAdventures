@@ -65,6 +65,21 @@ namespace StorytellingConsoleAdventures.Model
                     State plannedState = plannedStates.Dequeue();
                     Location plannedLocation = plannedState.PlannedLocation;
 
+                    bool visitedBefore = false;
+                    foreach(State visitedState in visitedStates)
+                    {
+                        if (visitedState.PlannedLocation == plannedLocation)
+                        {
+                            visitedBefore = true;
+                            break;
+                        }
+                    }
+
+                    if (visitedBefore)
+                    {
+                        continue;
+                    }
+
                     if (plannedLocation == knowledge.PlayerCharacter.CurrentLocation)
                     {
                         return plannedState.GetFirstAction();
@@ -74,14 +89,15 @@ namespace StorytellingConsoleAdventures.Model
                         List<string> possibilities = plannedLocation.GetPossibleDirections();
                         foreach(string possibility in possibilities)
                         {
-                            Location.Direction direction = (Location.Direction)Enum.Parse(typeof(Location.Direction), possibility.ToUpper());
-                            Location newLocation = plannedLocation.GetDirection(direction);
+                            Location newLocation = plannedLocation.GetDestination(possibility);
                             State newState = new State(newLocation);
                             newState.PreviousAction = possibility;
                             newState.PreviousState = plannedState;
                             plannedState.AddNextState(newState);
                             plannedStates.Enqueue(newState);
                         }
+
+                        visitedStates.Add(plannedState);
                     }
                 }
             }
