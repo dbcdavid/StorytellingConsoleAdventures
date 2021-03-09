@@ -16,14 +16,24 @@ namespace StorytellingConsoleAdventures
             Console.ReadLine();
         }
 
+        static void Initialize(ref World world, ref Player player, ref Monster monster)
+        {
+            world = InitializeTestScenario();
+            player = world.PlayerCharacter;
+            monster = world.MonsterCharacter;
+        }
+
         static void GameLoop()
         {
-            World world = InitializeTestScenario();
-            Player player = world.PlayerCharacter;
-            Monster monster = world.MonsterCharacter;
+            World world = null;
+            Player player = null;
+            Monster monster = null;
+
             string commandLine = "";
             string[] commandTokens = null;
             string message = "";
+
+            Initialize(ref world, ref player, ref monster);
 
             while (commandLine != Commands.EXIT)
             {
@@ -81,13 +91,7 @@ namespace StorytellingConsoleAdventures
                             bool continueGame = HandleSuccess();
                             if (continueGame)
                             {
-                                world = InitializeTestScenario();
-                                player = world.PlayerCharacter;
-                                monster = world.MonsterCharacter;
-                                commandLine = "";
-                                commandTokens = null;
-                                message = "";
-
+                                Initialize(ref world, ref player, ref monster);
                                 continue;
                             }
                             else
@@ -106,13 +110,7 @@ namespace StorytellingConsoleAdventures
 
                                 if (continueGame)
                                 {
-                                    world = InitializeTestScenario();
-                                    player = world.PlayerCharacter;
-                                    monster = world.MonsterCharacter;
-                                    commandLine = "";
-                                    commandTokens = null;
-                                    message = "";
-
+                                    Initialize(ref world, ref player, ref monster);
                                     continue;
                                 }
                                 else
