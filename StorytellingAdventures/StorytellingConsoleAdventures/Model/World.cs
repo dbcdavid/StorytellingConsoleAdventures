@@ -21,10 +21,13 @@ namespace StorytellingConsoleAdventures.Model
             map = new List<Location>();
         }
 
-        public bool IncreasePlayerActionCount()
+        public void IncreasePlayerActionCount()
         {
             playerActionCount = (playerActionCount + 1) % maxActionCount;
+        }
 
+        public bool IsMonsterTurn()
+        {
             if (playerActionCount == 0)
             {
                 return true;

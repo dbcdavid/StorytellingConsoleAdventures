@@ -16,6 +16,10 @@ namespace StorytellingConsoleAdventures.View
         public static string GAMEOVERMESSAGE = "You died...";
         public static string CONTINUEQUESTION = "Do you wish to try again? (Y/N)";
 
+        public static string MONSTERATTACK = "Before you can act, the monster attacks you!";
+        public static string PLAYERINGOODCONDITION = "Despite the attack, you still feel strong enough to keep going";
+        public static string PLAYERINBADCONDITION = "You start to feel weak as if it would be impossible to take another hit...";
+
         public static string CONTINUEMESSAGE = "You are determined... So let's try again";
         public static string NOTCONTINUEMESSAGE = "We will wait your return";
         public static string REPLAYMESSAGE = "Let's do it again. From the beggining";

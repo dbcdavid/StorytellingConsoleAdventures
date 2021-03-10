@@ -78,5 +78,13 @@ namespace StorytellingConsoleAdventures.Model
 
             return false;
         }
+
+        public int LifePoints
+        {
+            get
+            {
+                return lifePoints;
+            }
+        }
     }
 }
