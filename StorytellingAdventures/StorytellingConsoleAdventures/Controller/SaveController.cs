@@ -1,23 +1,77 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using StorytellingConsoleAdventures.Model;
 using StorytellingConsoleAdventures.View;
 
 namespace StorytellingConsoleAdventures.Controller
 {
+    class WorldSave
+    {
+        public List<LocationSave> map = new List<LocationSave>();
+        public List<ItemSave> items = new List<ItemSave>();
+        public EntitySave player = null;
+        public MonsterSave monster = null;
+        public int playerActionCount = 0;
+    }
+
+    class LocationSave
+    {
+        public string name = "";
+        public List<string> items = new List<string>();
+        public Dictionary<string, PathSave> paths = new Dictionary<string, PathSave>();
+    }
+
+    class PathSave
+    {
+        public string location1 = "";
+        public string location2 = "";
+        public ObstacleSave obstacleSave = null;
+    }
+
+    class ObstacleSave
+    {
+        public string name = "";
+        public string condition = "";
+        public bool solved = false;
+        public string solution = null;
+    }
+
+    class ItemSave
+    {
+        public string name;
+        public string effect;
+    }
+
+    class EntitySave
+    {
+        public string location = null;
+        public string name = string.Empty;
+        public int lifePoints = 0;
+        public List<string> items = new List<string>();
+    }
+
+    class MonsterSave
+    {
+        public string location = null;
+        public string name = string.Empty;
+        public int lifePoints = 0;
+        public List<string> items = new List<string>();
+        public Monster.Planning planning;
+    }
+
     static class SaveController
     {
         private static string FILENAME = "save.json";
 
         public static void Save(World world)
         {
+            WorldSave worldSave = CreateSaveObject(world);
+
             try
             {
-                string jsonString = JsonSerializer.Serialize(world);
+                string jsonString = JsonConvert.SerializeObject(worldSave, Formatting.Indented);
                 File.WriteAllText(FILENAME, jsonString);
                 Console.WriteLine(Messages.SAVESUCCESSFUL);
             }
@@ -33,7 +87,8 @@ namespace StorytellingConsoleAdventures.Controller
             try
             {
                 string jsonString = File.ReadAllText(FILENAME);
-                world = JsonSerializer.Deserialize<World>(jsonString);
+                WorldSave worldSave = JsonConvert.DeserializeObject<WorldSave>(jsonString);
+                world = LoadWorldSave(worldSave);
                 Console.WriteLine(Messages.LOADSUCCESSFUL);
 
                 return true;
@@ -45,6 +100,175 @@ namespace StorytellingConsoleAdventures.Controller
 
                 return false;
             }
+        }
+
+        private static WorldSave CreateSaveObject(World world)
+        {
+            WorldSave worldSave = new WorldSave();
+            worldSave.playerActionCount = world.PlayerActionCount;
+
+            foreach (Item item in world.Items)
+            {
+                ItemSave itemSave = new ItemSave();
+                itemSave.name = item.Name;
+                itemSave.effect = item.Effect;
+
+                worldSave.items.Add(itemSave);
+            }
+
+            Player player = world.PlayerCharacter;
+            EntitySave playerSave = new EntitySave();
+            playerSave.name = player.Name;
+            playerSave.lifePoints = player.LifePoints;
+            playerSave.location = player.CurrentLocation.Name;
+            
+            foreach(Item item in player.Items)
+            {
+                playerSave.items.Add(item.Name);
+            }
+            worldSave.player = playerSave;
+
+            Monster monster = world.MonsterCharacter;
+            MonsterSave monsterSave = new MonsterSave();
+            monsterSave.name = monster.Name;
+            monsterSave.lifePoints = monster.LifePoints;
+            monsterSave.location = monster.CurrentLocation.Name;
+            monsterSave.planning = monster.PlanningMethod;
+
+            foreach (Item item in monster.Items)
+            {
+                monsterSave.items.Add(item.Name);
+            }
+            worldSave.monster = monsterSave;
+
+            foreach (Location location in world.Map)
+            {
+                LocationSave locationSave = new LocationSave();
+                locationSave.name = location.Name;
+
+                foreach (Item item in location.Items)
+                {
+                    locationSave.items.Add(item.Name);
+                }
+
+                Dictionary<string, Model.Path> paths = location.Paths;
+
+                foreach (KeyValuePair<string, Model.Path> path in location.Paths)
+                {
+                    PathSave pathSave = new PathSave();
+                    pathSave.location1 = path.Value.Location1.Name;
+                    pathSave.location2 = path.Value.Location2.Name;
+                    
+                    if (path.Value.HasObstacle())
+                    {
+                        Obstacle obstacle = path.Value.PathObstacle;
+
+                        ObstacleSave obstacleSave = new ObstacleSave();
+                        obstacleSave.name = obstacle.Name;
+                        obstacleSave.condition = obstacle.Condition;
+                        obstacleSave.solved = obstacle.Solved;
+                        obstacleSave.solution = obstacle.Solution.Name;
+
+                        pathSave.obstacleSave = obstacleSave;
+                    }
+
+                    locationSave.paths.Add(path.Key, pathSave);
+                }
+
+                worldSave.map.Add(locationSave);
+            }
+
+            return worldSave;
+        }
+
+        private static World LoadWorldSave(WorldSave worldSave)
+        {
+            List<LocationSave> mapSave = worldSave.map;
+            EntitySave playerSave = worldSave.player;
+            MonsterSave monsterSave = worldSave.monster;
+            List<Location> map = new List<Location>();
+            Location playerLocation = null;
+            Location monsterLocation = null;
+            
+            foreach (LocationSave locationSave in mapSave)
+            {
+                Location location = new Location(locationSave.name);
+                map.Add(location);
+
+                if (location.Name.Equals(playerSave.location))
+                {
+                    playerLocation = location;
+                }
+
+                if (location.Name.Equals(monsterSave.location))
+                {
+                    monsterLocation = location;
+                }
+            }
+
+            Player player = new Player(playerSave.name, playerSave.lifePoints, playerLocation);
+            World world = new World(player);
+            Monster monster = new Monster(monsterSave.name, monsterSave.lifePoints, monsterLocation, world, monsterSave.planning);
+            world.PlayerActionCount = worldSave.playerActionCount;
+
+            foreach (ItemSave itemSave in worldSave.items)
+            {
+                Item item = new Item(itemSave.name, itemSave.effect);
+                world.AddItem(item);
+                if (playerSave.items.Contains(itemSave.name))
+                {
+                    player.AddItem(item);
+                }
+
+                if (monsterSave.items.Contains(monsterSave.name))
+                {
+                    monster.AddItem(item);
+                }
+            }
+
+            foreach (LocationSave locationSave in worldSave.map)
+            {
+                Location location = map.Find(l => l.Name.Equals(locationSave.name));
+                
+                foreach (string itemName in locationSave.items)
+                {
+                    Item item = world.Items.Find(i => i.Name.Equals(itemName));
+                    location.AddItem(item);
+                }
+
+                Dictionary<string, PathSave> pathsSaves = locationSave.paths;
+                List<Model.Path> paths = new List<Model.Path>();
+
+                foreach (KeyValuePair<string, PathSave> pathSavePair in pathsSaves)
+                {
+                    Model.Path path = null;
+                    PathSave pathSave = pathSavePair.Value;
+                    path = paths.Find(p => p.Location1.Name.Equals(pathSave.location1));
+                    
+                    if (path == null)
+                    {
+                        Location location1 = map.Find(l => l.Name.Equals(pathSave.location1));
+                        Location location2 = map.Find(l => l.Name.Equals(pathSave.location2));
+
+                        path = new Model.Path(location1, location2);
+
+                        ObstacleSave obstacleSave = pathSave.obstacleSave;
+                        if (obstacleSave != null)
+                        {
+                            Item solution = world.Items.Find(i => i.Name.Equals(obstacleSave.solution));
+                            Obstacle obstacle = new Obstacle(obstacleSave.name, obstacleSave.condition, obstacleSave.solved, solution);
+                            path.PathObstacle = obstacle;
+                        }
+                    }
+                    paths.Add(path);
+
+                    location.AddPath(pathSavePair.Key, path);
+                }
+
+                world.AddLocation(location);
+            }
+
+            return world;
         }
     }
 }

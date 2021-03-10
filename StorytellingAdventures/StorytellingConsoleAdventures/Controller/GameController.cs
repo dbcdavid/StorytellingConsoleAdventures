@@ -32,11 +32,11 @@ namespace StorytellingConsoleAdventures.Controller
                 }
 
                 commandLine = Console.ReadLine().ToLower();
-                bool isValid = Parser.ParseAction(commandLine, ref commandTokens);
+                bool isValid = Parser.ParseAction(commandLine, ref commandTokens, ref message);
 
                 if (isValid)
                 {
-                    bool specialCommand = CheckSpecialCommands(commandTokens);
+                    bool specialCommand = ExecuteSpecialCommands(commandTokens);
 
                     if (specialCommand)
                     {
@@ -108,6 +108,10 @@ namespace StorytellingConsoleAdventures.Controller
                         Console.WriteLine(message);
                     }
                 }
+                else
+                {
+                    Console.WriteLine(message);
+                }
 
                 Console.WriteLine();
             }
@@ -143,24 +147,27 @@ namespace StorytellingConsoleAdventures.Controller
             return false;
         }
 
-        private bool CheckSpecialCommands(string[] commandTokens) 
+        private bool ExecuteSpecialCommands(string[] commandTokens) 
         {
-            if (commandTokens[0].Equals(Commands.SAVE))
+            if (commandTokens.Length > 0)
             {
-                SaveController.Save(world);
-
-                return true;
-            }
-            else if (commandTokens[0].Equals(Commands.LOAD))
-            {
-                bool loaded = SaveController.Load(world);
-                if (loaded)
+                if (commandTokens[0].Equals(Commands.SAVE))
                 {
-                    player = world.PlayerCharacter;
-                    monster = world.MonsterCharacter;
-                }
+                    SaveController.Save(world);
 
-                return true;
+                    return true;
+                }
+                else if (commandTokens[0].Equals(Commands.LOAD))
+                {
+                    bool loaded = SaveController.Load(world);
+                    if (loaded)
+                    {
+                        player = world.PlayerCharacter;
+                        monster = world.MonsterCharacter;
+                    }
+
+                    return true;
+                }
             }
 
             return false;

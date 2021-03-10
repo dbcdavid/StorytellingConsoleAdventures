@@ -6,6 +6,8 @@ namespace StorytellingConsoleAdventures.View
 {
     static class Messages
     {
+        public static string INVALIDCOMMAND = "is not a valid action";
+
         public static string NOUSEMESSAGE = "cannot be used here";
         public static string MOVEMESSAGE = "%entity went from %from to %to";
         public static string MOVEFAILMESSAGE = "%entity cannot go %direction";
@@ -30,6 +32,7 @@ namespace StorytellingConsoleAdventures.View
         public static string FOUNDMESSAGE = "found";
         public static string EMPTYLOCATIONMESSAGE = "Nothing found";
 
+        public static string GETWHATMESSAGE = "get what?";
         public static string GOTITEMMESSAGE = "got";
         public static string DIDNOTGOTITEMMESSAGE = "can't get";
         public static string HASNOITEM = "doesn't have";

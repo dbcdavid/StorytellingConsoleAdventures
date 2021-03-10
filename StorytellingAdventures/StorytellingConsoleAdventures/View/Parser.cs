@@ -6,7 +6,7 @@ namespace StorytellingConsoleAdventures.View
 {
     static class Parser
     {
-        public static bool ParseAction(string line, ref string[] tokens)
+        public static bool ParseAction(string line, ref string[] tokens, ref string message)
         {
             string[] lineTokens = line.Split(" ");
 
@@ -18,6 +18,7 @@ namespace StorytellingConsoleAdventures.View
                 {
                     if (lineTokens.Length > 1)
                     {
+                        message = line + " " + Messages.INVALIDCOMMAND;
                         return false;
                     }
                     else
@@ -31,6 +32,7 @@ namespace StorytellingConsoleAdventures.View
                 {
                     if (lineTokens.Length > 1)
                     {
+                        message = line + " " + Messages.INVALIDCOMMAND;
                         return false;
                     }
                     else
@@ -42,14 +44,20 @@ namespace StorytellingConsoleAdventures.View
 
                 else if (actionName.Equals(Commands.GET))
                 {
-                    if (lineTokens.Length != 2)
+                    if (lineTokens.Length < 2)
                     {
+                        message = Messages.GETWHATMESSAGE;
                         return false;
                     }
-                    else
+                    else if (lineTokens.Length == 2)
                     {
                         tokens = lineTokens;
                         return true;
+                    }
+                    else
+                    {
+                        message = line + " " + Messages.INVALIDCOMMAND;
+                        return false;
                     }
                 }
 
@@ -57,6 +65,7 @@ namespace StorytellingConsoleAdventures.View
                 {
                     if (lineTokens.Length != 2)
                     {
+                        message = line + " " + Messages.INVALIDCOMMAND;
                         return false;
                     }
                     else
@@ -70,6 +79,7 @@ namespace StorytellingConsoleAdventures.View
                 {
                     if (lineTokens.Length != 1)
                     {
+                        message = line + " " + Messages.INVALIDCOMMAND;
                         return false;
                     }
                     else
@@ -83,6 +93,7 @@ namespace StorytellingConsoleAdventures.View
                 {
                     if (lineTokens.Length != 1)
                     {
+                        message = line + " " + Messages.INVALIDCOMMAND;
                         return false;
                     }
                     else

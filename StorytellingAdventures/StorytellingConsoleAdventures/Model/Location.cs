@@ -148,5 +148,13 @@ namespace StorytellingConsoleAdventures.Model
                 return items;
             }
         }
+
+        public Dictionary<string, Path> Paths
+        {
+            get
+            {
+                return paths;
+            }
+        }
     }
 }

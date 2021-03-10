@@ -103,5 +103,18 @@ namespace StorytellingConsoleAdventures.Model
             }
             return String.Empty;
         }
+
+        public Planning PlanningMethod
+        {
+            get
+            {
+                return planning;
+            }
+
+            set
+            {
+                planning = value;
+            }
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace StorytellingConsoleAdventures.Model
      * Path is the class that describes the connection between two locations
      * Currently, the program considers that paths are simmetric, which means that going from A to B is the same as going from B to A
      * It contains two locations (the locations that are connected by the path) and an item that may represent an obstacle in the path
-     */ 
+     */
     class Path
     {
         private Location location1 = null;
@@ -75,6 +75,22 @@ namespace StorytellingConsoleAdventures.Model
             set
             {
                 obstacle = value;
+            }
+        }
+
+        public Location Location1
+        {
+            get
+            {
+                return location1;
+            }
+        }
+
+        public Location Location2
+        {
+            get
+            {
+                return location2;
             }
         }
     }

@@ -12,7 +12,6 @@ namespace StorytellingConsoleAdventures.Model
         private Player player = null;
         private Monster monster = null;
         private int playerActionCount = 0;
-        private int maxActionCount = 2;
 
         public World(Player player)
         {
@@ -23,7 +22,7 @@ namespace StorytellingConsoleAdventures.Model
 
         public void IncreasePlayerActionCount()
         {
-            playerActionCount = (playerActionCount + 1) % maxActionCount;
+            playerActionCount = (playerActionCount + 1) % Constants.MAXACTIONCOUNT;
         }
 
         public bool IsMonsterTurn()
@@ -75,27 +74,6 @@ namespace StorytellingConsoleAdventures.Model
             }
 
             return null;
-        }
-
-        public Player PlayerCharacter
-        {
-            get
-            {
-                return player;
-            }
-        }
-
-        public Monster MonsterCharacter
-        {
-            set
-            {
-                monster = value;
-            }
-
-            get
-            {
-                return monster;
-            }
         }
 
         public static bool CheckEntityProximity(Entity entity1, Entity entity2)
@@ -223,6 +201,55 @@ namespace StorytellingConsoleAdventures.Model
             message = message.Replace("%direction", direction);
 
             return false;
+        }
+
+        public List<Item> Items
+        {
+            get
+            {
+                return items;
+            }
+        }
+
+        public List<Location> Map
+        {
+            get
+            {
+                return map;
+            }
+        }
+
+        public Player PlayerCharacter
+        {
+            get
+            {
+                return player;
+            }
+        }
+
+        public Monster MonsterCharacter
+        {
+            set
+            {
+                monster = value;
+            }
+
+            get
+            {
+                return monster;
+            }
+        }
+
+        public int PlayerActionCount
+        {
+            set
+            {
+                playerActionCount = value;
+            }
+            get
+            {
+                return playerActionCount;
+            }
         }
     }
 }

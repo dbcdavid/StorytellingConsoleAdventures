@@ -38,27 +38,6 @@ namespace StorytellingConsoleAdventures.Model
             return false;
         }
 
-        public Location CurrentLocation
-        {
-            get
-            {
-                return location;
-            }
-
-            set
-            {
-                location = value;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
-
         public void LoseLife()
         {
             lifePoints--;
@@ -84,6 +63,35 @@ namespace StorytellingConsoleAdventures.Model
             get
             {
                 return lifePoints;
+            }
+        }
+
+        public Location CurrentLocation
+        {
+            get
+            {
+                return location;
+            }
+
+            set
+            {
+                location = value;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+        }
+
+        public List<Item> Items
+        {
+            get
+            {
+                return items;
             }
         }
     }

@@ -91,5 +91,13 @@ namespace StorytellingConsoleAdventures.Model
                 return name;
             }
         }
+
+        public string Effect
+        {
+            get
+            {
+                return effect;
+            }
+        }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace StorytellingConsoleAdventures.Model
 {
@@ -10,8 +8,8 @@ namespace StorytellingConsoleAdventures.Model
      */
     class Obstacle
     {
-        string name = "";
-        string condition = "";
+        private string name = "";
+        private string condition = "";
         private bool solved = false;
         private Item solution = null;
 
@@ -59,6 +57,14 @@ namespace StorytellingConsoleAdventures.Model
             get
             {
                 return solved;
+            }
+        }
+
+        public Item Solution
+        {
+            get
+            {
+                return solution;
             }
         }
     }
