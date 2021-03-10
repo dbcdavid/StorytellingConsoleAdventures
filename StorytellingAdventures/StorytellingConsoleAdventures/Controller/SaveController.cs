@@ -28,23 +28,23 @@ namespace StorytellingConsoleAdventures.Controller
             }
         }
 
-        public static bool Load(World world)
+        public static World Load()
         {
             try
             {
                 string jsonString = File.ReadAllText(FILENAME);
                 WorldSave worldSave = JsonConvert.DeserializeObject<WorldSave>(jsonString);
-                world = LoadWorldSave(worldSave);
+                World world = LoadWorldSave(worldSave);
                 Console.WriteLine(Messages.LOADSUCCESSFUL);
 
-                return true;
+                return world;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(Messages.LOADFAILED);
                 Console.WriteLine(ex.Message);
 
-                return false;
+                return null;
             }
         }
 
@@ -53,6 +53,7 @@ namespace StorytellingConsoleAdventures.Controller
             WorldSave worldSave = new WorldSave();
             worldSave.playerActionCount = world.PlayerActionCount;
             worldSave.introduction = world.Introduction;
+            worldSave.ending = world.Ending;
 
             foreach (Item item in world.Items)
             {
@@ -158,7 +159,9 @@ namespace StorytellingConsoleAdventures.Controller
             Player player = new Player(playerSave.name, playerSave.lifePoints, playerLocation);
             World world = new World(player);
             world.Introduction = worldSave.introduction;
+            world.Ending = worldSave.ending;
             Monster monster = new Monster(monsterSave.name, monsterSave.lifePoints, monsterLocation, world, monsterSave.planning);
+            world.MonsterCharacter = monster;
             world.PlayerActionCount = worldSave.playerActionCount;
 
             foreach (ItemSave itemSave in worldSave.items)
@@ -176,6 +179,7 @@ namespace StorytellingConsoleAdventures.Controller
                 }
             }
 
+            List<Model.Path> paths = new List<Model.Path>();
             foreach (LocationSave locationSave in worldSave.map)
             {
                 Location location = map.Find(l => l.Name.Equals(locationSave.name));
@@ -187,13 +191,12 @@ namespace StorytellingConsoleAdventures.Controller
                 }
 
                 Dictionary<string, PathSave> pathsSaves = locationSave.paths;
-                List<Model.Path> paths = new List<Model.Path>();
 
                 foreach (KeyValuePair<string, PathSave> pathSavePair in pathsSaves)
                 {
                     Model.Path path = null;
                     PathSave pathSave = pathSavePair.Value;
-                    path = paths.Find(p => p.Location1.Name.Equals(pathSave.location1));
+                    path = paths.Find(p => p.Location1.Name.Equals(pathSave.location1) && p.Location2.Name.Equals(pathSave.location2));
                     
                     if (path == null)
                     {

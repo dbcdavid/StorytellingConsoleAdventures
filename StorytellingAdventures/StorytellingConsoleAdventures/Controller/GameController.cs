@@ -169,14 +169,18 @@ namespace StorytellingConsoleAdventures.Controller
                 }
                 else if (commandTokens[0].Equals(Commands.LOAD))
                 {
-                    bool loaded = SaveController.Load(world);
-                    if (loaded)
+                    World loadedWorld = SaveController.Load();
+                    if (loadedWorld != null)
                     {
+                        world = loadedWorld;
                         player = world.PlayerCharacter;
                         monster = world.MonsterCharacter;
-                    }
 
-                    return true;
+                        Console.ReadLine();
+                        Console.Clear();
+
+                        return true;
+                    }
                 }
             }
 
@@ -192,7 +196,10 @@ namespace StorytellingConsoleAdventures.Controller
 
         private void WriteMonsterAttack()
         {
+            ConsoleColor defaultColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(Messages.MONSTERATTACK);
+            Console.ForegroundColor = defaultColor;
         }
 
         private bool IsPlayerWithMonster()
@@ -257,7 +264,12 @@ namespace StorytellingConsoleAdventures.Controller
         private bool HandleGameOver()
         {
             string response = string.Empty;
+            
+            ConsoleColor defaultColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(Messages.GAMEOVERMESSAGE);
+            Console.ForegroundColor = defaultColor;
+
             Console.WriteLine(Messages.CONTINUEQUESTION);
 
             while (response != Commands.AFIRMATIVE && response != Commands.AFIRMATIVECOMPLETE &&
@@ -281,10 +293,10 @@ namespace StorytellingConsoleAdventures.Controller
             return false;
         }
 
-        static bool HandleSuccess()
+        private bool HandleSuccess()
         {
             string response = string.Empty;
-            Console.WriteLine(Messages.SUCCESSMESSAGE);
+            Console.WriteLine(world.Ending);
             Console.WriteLine(Messages.PLAYAGAINQUESTION);
 
             while (response != Commands.AFIRMATIVE && response != Commands.AFIRMATIVECOMPLETE &&
@@ -308,11 +320,11 @@ namespace StorytellingConsoleAdventures.Controller
             return false;
         }
 
-        static World InitializeTestScenario()
+        private World InitializeTestScenario()
         {
             Location a1 = new Location("Entrance");
             Location a2 = new Location("Statue Corridor");
-            Location a3 = new Location("Turning Point");
+            Location a3 = new Location("Turning Point East");
             a1.Description = "This is the dungeon entrance.\nFrom here, you can see a corridor to the east and a corridor to the south.";
             a2.Description = "As you reach this corridor, you notice a variety of statues. Probably they belonged to the mage that was living here long ago." +
                              "\nFrom here, the corridor continues to the west and to the east.";
@@ -326,9 +338,9 @@ namespace StorytellingConsoleAdventures.Controller
             b2.Description = "You enter the main room of the dungeon and notice the collection of magical items at display.";
             b3.Description = "Walking through this corridor, you see a sequence of portraits. Probably the mage's entire familty. You can go north or south.";
 
-            Location c1 = new Location("Turning Point");
+            Location c1 = new Location("Turning Point West");
             Location c2 = new Location("Foul Corridor");
-            Location c3 = new Location("Turning Point");
+            Location c3 = new Location("Turning Point South");
             c1.Description = "Here the corridor continues to the north and to the east.";
             c2.Description = "Apparently, this was the place where the monster stayed for the most of his time, because you can sense a putrid stench." +
                              "\nYou can go east and west from here.";
@@ -390,6 +402,11 @@ namespace StorytellingConsoleAdventures.Controller
                                  "that could be living inside." +
                                  "\nOnly with the weapon that you are searching, you would be able to hurt the creature. Without it, the best you can do is run." +
                                  "\nWith those words in mind, you enter the first room.";
+
+            world.Ending = "You thrust the sword into the guardian monster's belly, and after some vomiting, it drops dead in front of you." +
+                            "\nMission complete. At least, this one." +
+                            "\nYou put the sword back into the scabbard and head straight to the entrance. There is still much to do before resting.";
+            
             world.AddLocation(a1);
             world.AddLocation(a2);
             world.AddLocation(a3);

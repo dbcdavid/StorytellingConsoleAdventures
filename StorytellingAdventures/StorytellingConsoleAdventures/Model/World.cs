@@ -8,6 +8,7 @@ namespace StorytellingConsoleAdventures.Model
     class World
     {
         private string introduction = "";
+        private string ending = "";
         private List<Location> map = null;
         private List<Item> items = null;
         private Player player = null;
@@ -262,6 +263,18 @@ namespace StorytellingConsoleAdventures.Model
             set
             {
                 introduction = value;
+            }
+        }
+
+        public string Ending
+        {
+            get
+            {
+                return ending;
+            }
+            set
+            {
+                ending = value;
             }
         }
     }

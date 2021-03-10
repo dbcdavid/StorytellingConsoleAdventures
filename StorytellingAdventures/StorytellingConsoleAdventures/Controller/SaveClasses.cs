@@ -13,6 +13,7 @@ namespace StorytellingConsoleAdventures.Controller
         public MonsterSave monster = null;
         public int playerActionCount = 0;
         public string introduction = "";
+        public string ending = "";
     }
 
     class LocationSave
