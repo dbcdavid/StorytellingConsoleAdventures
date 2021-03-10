@@ -4,6 +4,9 @@ using System.Text;
 
 namespace StorytellingConsoleAdventures.View
 {
+    /// <summary>
+    /// Class with a description of all messages the game uses to create the feedback to the user.
+    /// </summary>
     static class Messages
     {
         public static string INVALIDCOMMAND = "is not a valid action";

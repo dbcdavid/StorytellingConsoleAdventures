@@ -4,21 +4,26 @@ using StorytellingConsoleAdventures.View;
 
 namespace StorytellingConsoleAdventures.Controller
 {
+    /// <summary>
+    /// Class responsible of controlling the main game elements, the game loop, conditions of continuing and finishing.
+    /// This version also contains a function that creates an example map to test the game.
+    /// </summary>
     class GameController
     {
         private World world = null;
         private Player player = null;
         private Monster monster = null;
-        private bool debug = true;
         private Location previousPlayerLocation = null;
         private Location currentPlayerLocation = null;
-        private string previousCommand = "";
 
         public GameController()
         {
             Initialize();
         }
 
+        /// <summary>
+        /// Function that controls the main execution of the game, with the conditions of starting, continuing and ending
+        /// </summary>
         public void GameLoop()
         {
             string commandLine = "";
@@ -36,7 +41,7 @@ namespace StorytellingConsoleAdventures.Controller
 
                 WritePlayerMonsterCondition();
 
-                if (debug)
+                if (Constants.DEBUG)
                 {
                     Console.WriteLine("Player is at: " + player.CurrentLocation.Name);
                 }
@@ -106,7 +111,7 @@ namespace StorytellingConsoleAdventures.Controller
                             {
                                 world.ExecuteAction(monster, commandTokens, ref message);
 
-                                if (debug)
+                                if (Constants.DEBUG)
                                 {
                                     Console.WriteLine(message);
                                 }
@@ -127,6 +132,12 @@ namespace StorytellingConsoleAdventures.Controller
             }
         }
 
+        /// <summary>
+        /// Checks if the player is in condition of taking damage this turn.
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the player must take damage.
+        /// </returns>
         private bool TakeDamageCondition()
         {
             if (player.CurrentLocation == monster.CurrentLocation)
@@ -137,6 +148,12 @@ namespace StorytellingConsoleAdventures.Controller
             return false;
         }
 
+        /// <summary>
+        /// Checks if the game has reached the conditions of the good ending.
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the good ending conditions were met.
+        /// </returns>
         private bool ReachedGoodEnding()
         {
             if (!monster.IsAlive())
@@ -147,6 +164,12 @@ namespace StorytellingConsoleAdventures.Controller
             return false;
         }
 
+        /// <summary>
+        /// Checks if the game has reached the conditions of the bad ending.
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the bad ending conditions were met.
+        /// </returns>
         private bool ReachedBadEnding()
         {
             if (!player.IsAlive())
@@ -157,6 +180,12 @@ namespace StorytellingConsoleAdventures.Controller
             return false;
         }
 
+        /// <summary>
+        /// Checks if the game received a special command (which are save and load).
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the game received a special command.
+        /// </returns>
         private bool ExecuteSpecialCommands(string[] commandTokens) 
         {
             if (commandTokens.Length > 0)
@@ -187,6 +216,9 @@ namespace StorytellingConsoleAdventures.Controller
             return false;
         }
 
+        /// <summary>
+        /// Writes in console the description of the player current location.
+        /// </summary>
         private void WriteLocationDescription()
         {
             Location location = player.CurrentLocation;
@@ -194,6 +226,9 @@ namespace StorytellingConsoleAdventures.Controller
             Console.WriteLine(location.Description);
         }
 
+        /// <summary>
+        /// Writes in console the description of the monster attack.
+        /// </summary>
         private void WriteMonsterAttack()
         {
             ConsoleColor defaultColor = Console.ForegroundColor;
@@ -202,6 +237,12 @@ namespace StorytellingConsoleAdventures.Controller
             Console.ForegroundColor = defaultColor;
         }
 
+        /// <summary>
+        /// Checks if the player is currently at the same place as the monster.
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the player is at the same plce as the monster.
+        /// </returns>
         private bool IsPlayerWithMonster()
         {
             bool isPlayerWithMonster = false;
@@ -214,6 +255,9 @@ namespace StorytellingConsoleAdventures.Controller
             return isPlayerWithMonster;
         }
 
+        /// <summary>
+        /// Writes in console the proximity condition between the player and the monster.
+        /// </summary>
         private void WritePlayerMonsterCondition()
         {
             bool isPlayerNearMonster = World.CheckEntityProximity(player, monster);
@@ -231,6 +275,9 @@ namespace StorytellingConsoleAdventures.Controller
             Console.ForegroundColor = defaultColor;
         }
 
+        /// <summary>
+        /// Writes in console the message related to the player life condition.
+        /// </summary>
         private void WritePlayerLifeCondition()
         {
             if (player.LifePoints > 1)
@@ -243,6 +290,9 @@ namespace StorytellingConsoleAdventures.Controller
             }
         }
 
+        /// <summary>
+        /// Initializes the game conditions: the main variables of the game loop (world, player, monster) and initial text.
+        /// </summary>
         private void Initialize()
         {
             world = InitializeTestScenario();
@@ -253,6 +303,9 @@ namespace StorytellingConsoleAdventures.Controller
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Writes in console the world introduction.
+        /// </summary>
         private void WriteWorldIntroduction()
         {
             if (world != null)
@@ -261,6 +314,12 @@ namespace StorytellingConsoleAdventures.Controller
             }
         }
 
+        /// <summary>
+        /// Checks if the game reached the game over condition, writes the corresponding messages and checks if the player wants to try again.
+        /// </summary>
+        /// /// <returns>
+        /// A bool that indicates if the player wants to try again.
+        /// </returns>
         private bool HandleGameOver()
         {
             string response = string.Empty;
@@ -293,6 +352,12 @@ namespace StorytellingConsoleAdventures.Controller
             return false;
         }
 
+        /// <summary>
+        /// Checks if the game reached the success condition, writes the corresponding messages and checks if the player wants to play again.
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the player wants to play again.
+        /// </returns>
         private bool HandleSuccess()
         {
             string response = string.Empty;
@@ -320,6 +385,12 @@ namespace StorytellingConsoleAdventures.Controller
             return false;
         }
 
+        /// <summary>
+        /// Function that creates a test world to play the game.
+        /// </summary>
+        /// <returns>
+        /// The world created for test.
+        /// </returns>
         private World InitializeTestScenario()
         {
             Location a1 = new Location("Entrance");
@@ -347,21 +418,21 @@ namespace StorytellingConsoleAdventures.Controller
             c3.Description = "Here the corridor continues to the north and to the west.";
 
 
-            Path a1a2 = new Path(a1, a2);
-            Path a1b1 = new Path(a1, b1);
+            LocationPath a1a2 = new LocationPath(a1, a2);
+            LocationPath a1b1 = new LocationPath(a1, b1);
 
-            Path a2a3 = new Path(a2, a3);
+            LocationPath a2a3 = new LocationPath(a2, a3);
 
-            Path a3b3 = new Path(a3, b3);
+            LocationPath a3b3 = new LocationPath(a3, b3);
 
-            Path b1b2 = new Path(b1, b2);
-            Path b1c1 = new Path(b1, c1);
+            LocationPath b1b2 = new LocationPath(b1, b2);
+            LocationPath b1c1 = new LocationPath(b1, c1);
 
-            Path b3c3 = new Path(b3, c3);
+            LocationPath b3c3 = new LocationPath(b3, c3);
 
-            Path c1c2 = new Path(c1, c2);
+            LocationPath c1c2 = new LocationPath(c1, c2);
 
-            Path c2c3 = new Path(c2, c3);
+            LocationPath c2c3 = new LocationPath(c2, c3);
 
             a1.AddPath(Commands.EAST, a1a2);
             a1.AddPath(Commands.SOUTH, a1b1);
@@ -390,7 +461,7 @@ namespace StorytellingConsoleAdventures.Controller
             c3.AddPath(Commands.WEST, c2c3);
             c3.AddPath(Commands.NORTH, b3c3);
 
-            Player player = new Player("Player", 3, a1);
+            Player player = new Player("You", 3, a1);
 
             World world = new World(player);
             world.Introduction = "IN SEARCH OF POWER\n" +

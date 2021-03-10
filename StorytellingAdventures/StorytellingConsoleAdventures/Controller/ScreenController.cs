@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace StorytellingConsoleAdventures.Controller
 {
+    /// <summary>
+    /// Class responsible for controlling aspects of the console window
+    /// </summary>
     static class ScreenController
     {
         /*
@@ -20,6 +23,9 @@ namespace StorytellingConsoleAdventures.Controller
         private const int RESTORE = 9;
 
 
+        /// <summary>
+        /// Makes the console window go to fullscreen
+        /// </summary>
         public static void GoToFullScreen()
         {
             ShowWindow(ThisConsole, MAXIMIZE);

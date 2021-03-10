@@ -7,10 +7,16 @@ using StorytellingConsoleAdventures.View;
 
 namespace StorytellingConsoleAdventures.Controller
 {
+    /// <summary>
+    /// Class responsible for saving and loading the condition of the game
+    /// </summary>
     static class SaveController
     {
         private static string FILENAME = "save.json";
 
+        /// <summary>
+        /// Receives a world and generates the file with complete description of the world
+        /// </summary>
         public static void Save(World world)
         {
             WorldSave worldSave = CreateSaveObject(world);
@@ -28,6 +34,12 @@ namespace StorytellingConsoleAdventures.Controller
             }
         }
 
+        /// <summary>
+        /// Reads a save file and generates a new world instance with the file descriptions.
+        /// </summary>
+        /// <returns>
+        /// A World with the file descriptions
+        /// </returns>
         public static World Load()
         {
             try
@@ -48,6 +60,12 @@ namespace StorytellingConsoleAdventures.Controller
             }
         }
 
+        /// <summary>
+        /// Creates an instance of the WorldSave class with the description of the world passed as parameter.
+        /// </summary>
+        /// <returns>
+        /// The WorldSave instance of the world passed as parameter.
+        /// </returns>
         private static WorldSave CreateSaveObject(World world)
         {
             WorldSave worldSave = new WorldSave();
@@ -55,11 +73,11 @@ namespace StorytellingConsoleAdventures.Controller
             worldSave.introduction = world.Introduction;
             worldSave.ending = world.Ending;
 
-            foreach (Item item in world.Items)
+            foreach (KeyValuePair<string, Item> itemPair in world.Items)
             {
                 ItemSave itemSave = new ItemSave();
-                itemSave.name = item.Name;
-                itemSave.effect = item.Effect;
+                itemSave.name = itemPair.Value.Name;
+                itemSave.effect = itemPair.Value.Effect;
 
                 worldSave.items.Add(itemSave);
             }
@@ -89,20 +107,18 @@ namespace StorytellingConsoleAdventures.Controller
             }
             worldSave.monster = monsterSave;
 
-            foreach (Location location in world.Map)
+            foreach (KeyValuePair<string, Location> locationPair in world.Map)
             {
                 LocationSave locationSave = new LocationSave();
-                locationSave.name = location.Name;
-                locationSave.description = location.Description;
+                locationSave.name = locationPair.Value.Name;
+                locationSave.description = locationPair.Value.Description;
 
-                foreach (Item item in location.Items)
+                foreach (Item item in locationPair.Value.Items)
                 {
                     locationSave.items.Add(item.Name);
                 }
 
-                Dictionary<string, Model.Path> paths = location.Paths;
-
-                foreach (KeyValuePair<string, Model.Path> path in location.Paths)
+                foreach (KeyValuePair<string, LocationPath> path in locationPair.Value.Paths)
                 {
                     PathSave pathSave = new PathSave();
                     pathSave.location1 = path.Value.Location1.Name;
@@ -130,12 +146,18 @@ namespace StorytellingConsoleAdventures.Controller
             return worldSave;
         }
 
+        /// <summary>
+        /// Transforms a WorldSave instance into a World instance.
+        /// </summary>
+        /// <returns>
+        /// The World instance obtainable with a given WorldSave instance.
+        /// </returns>
         private static World LoadWorldSave(WorldSave worldSave)
         {
             List<LocationSave> mapSave = worldSave.map;
             EntitySave playerSave = worldSave.player;
             MonsterSave monsterSave = worldSave.monster;
-            List<Location> map = new List<Location>();
+            Dictionary<string, Location> map = new Dictionary<string, Location>(StringComparer.OrdinalIgnoreCase);
             Location playerLocation = null;
             Location monsterLocation = null;
             
@@ -143,7 +165,7 @@ namespace StorytellingConsoleAdventures.Controller
             {
                 Location location = new Location(locationSave.name);
                 location.Description = locationSave.description;
-                map.Add(location);
+                map.Add(location.Name, location);
 
                 if (location.Name.Equals(playerSave.location))
                 {
@@ -179,14 +201,14 @@ namespace StorytellingConsoleAdventures.Controller
                 }
             }
 
-            List<Model.Path> paths = new List<Model.Path>();
+            List<LocationPath> paths = new List<LocationPath>();
             foreach (LocationSave locationSave in worldSave.map)
             {
-                Location location = map.Find(l => l.Name.Equals(locationSave.name));
+                Location location = map[locationSave.name];
                 
                 foreach (string itemName in locationSave.items)
                 {
-                    Item item = world.Items.Find(i => i.Name.Equals(itemName));
+                    Item item = world.GetItem(itemName);
                     location.AddItem(item);
                 }
 
@@ -194,21 +216,21 @@ namespace StorytellingConsoleAdventures.Controller
 
                 foreach (KeyValuePair<string, PathSave> pathSavePair in pathsSaves)
                 {
-                    Model.Path path = null;
+                    LocationPath path = null;
                     PathSave pathSave = pathSavePair.Value;
                     path = paths.Find(p => p.Location1.Name.Equals(pathSave.location1) && p.Location2.Name.Equals(pathSave.location2));
                     
                     if (path == null)
                     {
-                        Location location1 = map.Find(l => l.Name.Equals(pathSave.location1));
-                        Location location2 = map.Find(l => l.Name.Equals(pathSave.location2));
+                        Location location1 = map[pathSave.location1];
+                        Location location2 = map[pathSave.location2];
 
-                        path = new Model.Path(location1, location2);
+                        path = new LocationPath(location1, location2);
 
                         ObstacleSave obstacleSave = pathSave.obstacleSave;
                         if (obstacleSave != null)
                         {
-                            Item solution = world.Items.Find(i => i.Name.Equals(obstacleSave.solution));
+                            Item solution = world.GetItem(obstacleSave.solution);
                             Obstacle obstacle = new Obstacle(obstacleSave.name, obstacleSave.condition, obstacleSave.solved, solution);
                             path.PathObstacle = obstacle;
                         }

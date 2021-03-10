@@ -1,0 +1,696 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StorytellingConsoleAdventures</name>
+    </assembly>
+    <members>
+        <member name="T:StorytellingConsoleAdventures.Constants">
+            <summary>
+            Class with a description of all constants available to the game.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Controller.GameController">
+            <summary>
+            Class responsible of controlling the main game elements, the game loop, conditions of continuing and finishing.
+            This version also contains a function that creates an example map to test the game.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.GameLoop">
+            <summary>
+            Function that controls the main execution of the game, with the conditions of starting, continuing and ending
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.TakeDamageCondition">
+            <summary>
+            Checks if the player is in condition of taking damage this turn.
+            </summary>
+            <returns>
+            A bool that indicates if the player must take damage.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.ReachedGoodEnding">
+            <summary>
+            Checks if the game has reached the conditions of the good ending.
+            </summary>
+            <returns>
+            A bool that indicates if the good ending conditions were met.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.ReachedBadEnding">
+            <summary>
+            Checks if the game has reached the conditions of the bad ending.
+            </summary>
+            <returns>
+            A bool that indicates if the bad ending conditions were met.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.ExecuteSpecialCommands(System.String[])">
+            <summary>
+            Checks if the game received a special command (which are save and load).
+            </summary>
+            <returns>
+            A bool that indicates if the game received a special command.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.WriteLocationDescription">
+            <summary>
+            Writes in console the description of the player current location.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.WriteMonsterAttack">
+            <summary>
+            Writes in console the description of the monster attack.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.IsPlayerWithMonster">
+            <summary>
+            Checks if the player is currently at the same place as the monster.
+            </summary>
+            <returns>
+            A bool that indicates if the player is at the same plce as the monster.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.WritePlayerMonsterCondition">
+            <summary>
+            Writes in console the proximity condition between the player and the monster.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.WritePlayerLifeCondition">
+            <summary>
+            Writes in console the message related to the player life condition.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.Initialize">
+            <summary>
+            Initializes the game conditions: the main variables of the game loop (world, player, monster) and initial text.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.WriteWorldIntroduction">
+            <summary>
+            Writes in console the world introduction.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.HandleGameOver">
+            <summary>
+            Checks if the game reached the game over condition, writes the corresponding messages and checks if the player wants to try again.
+            </summary>
+            /// <returns>
+            A bool that indicates if the player wants to try again.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.HandleSuccess">
+            <summary>
+            Checks if the game reached the success condition, writes the corresponding messages and checks if the player wants to play again.
+            </summary>
+            <returns>
+            A bool that indicates if the player wants to play again.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.GameController.InitializeTestScenario">
+            <summary>
+            Function that creates a test world to play the game.
+            </summary>
+            <returns>
+            The world created for test.
+            </returns>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Controller.WorldSave">
+            <summary>
+            Class that contains "saveable" version of the World class
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Controller.LocationSave">
+            <summary>
+            Class that contains "saveable" version of the Location class
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Controller.PathSave">
+            <summary>
+            Class that contains "saveable" version of the LocationPath class
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Controller.ObstacleSave">
+            <summary>
+            Class that contains "saveable" version of the Obstacle class
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Controller.ItemSave">
+            <summary>
+            Class that contains "saveable" version of the Item class
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Controller.EntitySave">
+            <summary>
+            Class that contains "saveable" version of the Entity class
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Controller.MonsterSave">
+            <summary>
+            Class that contains "saveable" version of the Monster class
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Controller.SaveController">
+            <summary>
+            Class responsible for saving and loading the condition of the game
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.SaveController.Save(StorytellingConsoleAdventures.Model.World)">
+            <summary>
+            Receives a world and generates the file with complete description of the world
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.SaveController.Load">
+            <summary>
+            Reads a save file and generates a new world instance with the file descriptions.
+            </summary>
+            <returns>
+            A World with the file descriptions
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.SaveController.CreateSaveObject(StorytellingConsoleAdventures.Model.World)">
+            <summary>
+            Creates an instance of the WorldSave class with the description of the world passed as parameter.
+            </summary>
+            <returns>
+            The WorldSave instance of the world passed as parameter.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.SaveController.LoadWorldSave(StorytellingConsoleAdventures.Controller.WorldSave)">
+            <summary>
+            Transforms a WorldSave instance into a World instance.
+            </summary>
+            <returns>
+            The World instance obtainable with a given WorldSave instance.
+            </returns>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Controller.ScreenController">
+            <summary>
+            Class responsible for controlling aspects of the console window
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Controller.ScreenController.GoToFullScreen">
+            <summary>
+            Makes the console window go to fullscreen
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Model.Entity">
+            <summary>
+            Class created to hold some common aspects between the player and the monster.
+            In future iterations, the code could evolve to make the monster a kind of player, capable of executing his actions
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Entity.AddItem(StorytellingConsoleAdventures.Model.Item)">
+            <summary>
+            Adds an item to the list of items the entity is holding.
+            </summary>
+            <returns>
+            A bool that indicates if the item was added (it is not possible to hold two items of the same name, which must be handled during the world creation).
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Entity.HasItem(System.String)">
+            <summary>
+            Checks if the entity has the item passed as parameter.
+            </summary>
+            <returns>
+            A bool that indicates if the entity has the item.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Entity.LoseLife">
+            <summary>
+            Makes the entity lose one point of life.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Entity.Die">
+            <summary>
+            Make the entity lose all his life points.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Entity.IsAlive">
+            <summary>
+            Checks if the entity is still alive, i. e., if it has at least one life point.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Entity.LifePoints">
+            <summary>
+            Handler of the entity's current life points.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Entity.CurrentLocation">
+            <summary>
+            Handler of the entity's current location.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Entity.Name">
+            <summary>
+            Handler of the entity's current name.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Entity.Items">
+            <summary>
+            Handler of the entity's current list of items.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Model.Item">
+            <summary>
+            Item is the class that describes objects that the player may find and eventually use
+            It contains a name, and an effect, which is a function name called when the item is used
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Item.Use(System.Object[],System.String@)">
+            <summary>
+            Calls the function correponding to the effect of the item.
+            This special call uses c# reflection. This was chosen to ease future implementations. If the designer wishes to create new items with different effects,
+            the programmer will only need to create a function with those effects' name.
+            </summary>
+            <returns>
+            A bool that indicates if the effect function was executed.
+            A string that contains the action description
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Item.Attack(System.Object,System.Object)">
+            <summary>
+            This is the sword function. It kill the target given as parameter by reducing its life points to 0
+            </summary>
+            <returns>
+            A string containing the message of the action
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Item.Unlock(System.Object,System.Object)">
+            <summary>
+            This is the "Key" function. It unlocks the door which is the obstacle to open the place where the sword is.
+            </summary>
+            <returns>
+            A string containing the message of the action.
+            </returns>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Item.Name">
+            <summary>
+            Handler of the item's name.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Item.Effect">
+            <summary>
+            Handler of the item's effect.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Model.Location">
+            <summary>
+            Location is the class that describes the places from the map where items and entities may be.
+            Each location contains a name, a list of items, a description text, and a path to each connecting location
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Location.AddItem(StorytellingConsoleAdventures.Model.Item)">
+            <summary>
+            Adds an item to the list of items that can be found at the location.
+            </summary>
+            <returns>
+            A bool that indicates if the item was added (it is not possible to have two items of the same name, which must be handled during the world creation).
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Location.RemoveItem(System.String)">
+            <summary>
+            Removes an item from the list of items.
+            </summary>
+            <returns>
+            A bool that indicates if the item was removed.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Location.IsNear(StorytellingConsoleAdventures.Model.Location)">
+            <summary>
+            Verifies if the given location has a path to this location.
+            </summary>
+            <returns>
+            A bool that indicates if the given location has a path to this location.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Location.GetPath(System.String)">
+            <summary>
+            Searches for the path that can be reached by following a given direction.
+            </summary>
+            <returns>
+            The path that can be found using the given direction. If there is no such path, the function returns null.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Location.GetDestination(System.String)">
+            <summary>
+            Searches for the location that can be reached by following a given direction.
+            </summary>
+            <returns>
+            The location that can be found using the given direction. If there is no such location, the function returns null.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Location.GetPossibleDirections">
+            <summary>
+            Gets the name of all possible directions from this location.
+            </summary>
+            <returns>
+            A list of all the possible direction names from this location.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Location.GetObstacles">
+            <summary>
+            Searches for all the obstacles in the middle of the paths reacheables from this location.
+            </summary>
+            <returns>
+            A list of all the obstacles found at the reacheable paths from this location.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Location.HasObstacle(StorytellingConsoleAdventures.Model.Obstacle)">
+            <summary>
+            Checks if there is an obstacle in any of the paths reacheables from this location.
+            </summary>
+            <returns>
+            A bool that indicates if there are any obstacles.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Location.AddPath(System.String,StorytellingConsoleAdventures.Model.LocationPath)">
+            <summary>
+            Adds a new path from this location
+            </summary>
+            <returns>
+            A bool indicating if the path was added. If there was already a path with the same direction, it is not added.
+            </returns>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Location.Name">
+            <summary>
+            Handler of the location's name.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Location.Items">
+            <summary>
+            Handler of the location's item list.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Location.Paths">
+            <summary>
+            Handler of the location's paths.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Location.Description">
+            <summary>
+            Handler of the location's descriptions.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Model.LocationPath">
+            <summary>
+            LocationPath is the class that describes the connection between two locations
+            Currently, the program considers that paths are simmetric, which means that going from A to B is the same as going from B to A
+            It contains two locations (the locations that are connected by the path) and an obstacle that may represent a problem that blocks the path
+            If there is no obstacle, the variable will be null, if there is an obstacle it will contain an instance to the corresponding class
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.LocationPath.GetDestination(StorytellingConsoleAdventures.Model.Location)">
+            <summary>
+            Gets the location that is reacheable from the given location.
+            </summary>
+            <returns>
+            The location reacheable from the given location. If there is no such location, it returns null.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.LocationPath.HasObstacle(StorytellingConsoleAdventures.Model.Obstacle)">
+            <summary>
+            Checks if the given obstacle is the obstacle of this path
+            </summary>
+            <returns>
+            A bool that indicates if the the given obstacle is the obstacle of this path
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.LocationPath.HasObstacle">
+            <summary>
+            Checks if there is an obstacle in this path.
+            </summary>
+            <returns>
+            A bool that indicates if there is an obstacle in this path.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.LocationPath.HasUnsolvedObstacle">
+            <summary>
+            Checks if there is an obstacle still blocking this path.
+            </summary>
+            <returns>
+            A bool that indicates if there is an obstacle blocking this path.
+            </returns>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.LocationPath.PathObstacle">
+            <summary>
+            Handler of the path's obstacle.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.LocationPath.Location1">
+            <summary>
+            Handler of the path's first location.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.LocationPath.Location2">
+            <summary>
+            Handler of the path's second location.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Model.Monster">
+            <summary>
+            Monster is a class that inherits from entity and describes the parameters of the monster that will try to kill the player
+            It contains a knowledge, which is a copy of the world (but in future iterations it could be different to represent that it may make errors),
+            a description of planning method, which can be random (it will walk randomly) or chase (it will chase the player),
+            and a variable that generates the random numbers necessary for the random behavior.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Monster.GetNextAction(System.String[]@)">
+            <summary>
+            Gets the monster's planned next action.
+            </summary>
+            <returns>
+            A bool that indicates if it was capable of finding an action to execute, and
+            an array of tokens that describe the monster's intended action.
+            It returns a list of tokens to make it similar to the player's input.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Monster.Think">
+            <summary>
+            Plans the action the monster must execute. The function creates a search tree, performing a broad search to get the best action. 
+            Given the current map size this approach should not cause a perceivable performance problem.
+            One optimization was implemented: the planning avoids states already visited.
+            The planning process currently only considers the move action. In future iterations it could include different actions such as get items.
+            </summary>
+            <returns>
+            A string that describes the chosen action. If no action is found, it returns an empty string.
+            </returns>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Monster.PlanningMethod">
+            <summary>
+            Handler of the monster's planning method.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Model.Obstacle">
+            <summary>
+            Obstacle is the class that describes a problem that can be found in a path (a locked door, for instance)
+            each obstacle has a name, a condition (a text that describes the situation), 
+            it may be solved or not and has an item that references what can be used to solve it
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.Obstacle.Solve(StorytellingConsoleAdventures.Model.Item)">
+            <summary>
+            Checks if the given item is the solution and, if so, changes the condition of the obstacle to solved.
+            </summary>
+            <returns>
+            A bool that indicates if the obstacle was solved
+            </returns>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Obstacle.Name">
+            <summary>
+            Handler of the obstacle's name.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Obstacle.Condition">
+            <summary>
+            Handler of the obstacle's condition description.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Obstacle.Solved">
+            <summary>
+            Handler of the obstacle's indicator of blocking.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.Obstacle.Solution">
+            <summary>
+            Handler of the obstacle's item that solves the blocking problem.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Model.Player">
+            <summary>
+            Player is the class that describes the relevant attributes of the player character
+            It inherits all attributes from the Entity class
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Model.World">
+            <summary>
+            This class is responsible for holding the attributes of worlds, each world representing an entire map and or situation in time.
+            It contains the texts of introduction and ending, all the locations and items, references to the player and monster
+            and a variable (playeractioncount) which is used to verify if the monster must act.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.World.IncreasePlayerActionCount">
+            <summary>
+            Increases the current playeractioncount. It has a maximum amount determined by the constants. If the maximum is reached, the value resets to zero.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.World.IsMonsterTurn">
+            <summary>
+            Checks if the monster must act now.
+            </summary>
+            <returns>
+            A bool that indicates if the monster must act.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.World.AddLocation(StorytellingConsoleAdventures.Model.Location)">
+            <summary>
+            Adds a location to the list of locations that can be found in the world.
+            </summary>
+            <returns>
+            A bool that indicates if the location was added (it is not possible to have two locations of the same name, which must be handled during the world creation).
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.World.AddItem(StorytellingConsoleAdventures.Model.Item)">
+            <summary>
+            Adds an item to the dictionary of items that can be found in the world.
+            </summary>
+            <returns>
+            A bool that indicates if the item was added (it is not possible to have two items of the same name, which must be handled during the world creation).
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.World.GetItem(System.String)">
+            <summary>
+            Searches for the given item
+            </summary>
+            <returns>
+            An instance to the item if it is found. Otherwise returns null.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.World.GetLocation(System.String)">
+            <summary>
+            Searches for the given location
+            </summary>
+            <returns>
+            An instance to the location if it is found. Otherwise returns null.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.World.CheckEntityProximity(StorytellingConsoleAdventures.Model.Entity,StorytellingConsoleAdventures.Model.Entity)">
+            <summary>
+            Checks if two given entities are in locations connected with a path
+            </summary>
+            <returns>
+            A bool that indicates if the entities are in connected locations
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.World.ExecuteAction(StorytellingConsoleAdventures.Model.Entity,System.String[],System.String@)">
+            <summary>
+            Changes the world with the given action consequences.
+            For each possible command there is a specific set of instructions to follow.
+            If the action "use" is received, this function prepares a set of generic objects for the C# reflection function used inside the Item class.
+            </summary>
+            <returns>
+            A bool that indicates if the action was executed
+            A string message with the description of the execution attempt.
+            </returns>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Model.World.MoveEntity(StorytellingConsoleAdventures.Model.Entity,System.String,System.String@)">
+            <summary>
+            Attempts to change the location of the given actor with the given direction
+            </summary>
+            <returns>
+            A bool that indicates if the action was executed
+            A string message with the description of the move attempt.
+            </returns>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.World.Items">
+            <summary>
+            Handler of the world's items.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.World.Map">
+            <summary>
+            Handler of the world's locations.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.World.PlayerCharacter">
+            <summary>
+            Handler of the world's player instance.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.World.MonsterCharacter">
+            <summary>
+            Handler of the world's monster instance.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.World.PlayerActionCount">
+            <summary>
+            Handler of the world's counting of the player turn.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.World.Introduction">
+            <summary>
+            Handler of the world's introduction text.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Model.World.Ending">
+            <summary>
+            Handler of the world's ending text.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Planner.State">
+            <summary>
+            Class used by the monster's planning method to register the possible situations.
+            It contains a description of the action used to reach it, a reference to the previous state, a list of the reacheable states,
+            and the location that is being planned.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Planner.State.AddNextState(StorytellingConsoleAdventures.Planner.State)">
+            <summary>
+            Adds a state to the list of reacheable states.
+            </summary>
+        </member>
+        <member name="M:StorytellingConsoleAdventures.Planner.State.GetFirstAction">
+            <summary>
+            Goes up to the initial state to check which is the first action to be executed to reach this state.
+            </summary>
+            <returns>
+            A string with the description of the action that need to be executed to reach this state.
+            </returns>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Planner.State.PlannedLocation">
+            <summary>
+            Handler of the state's location.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Planner.State.PreviousAction">
+            <summary>
+            Handler of the state's previous action.
+            </summary>
+        </member>
+        <member name="P:StorytellingConsoleAdventures.Planner.State.PreviousState">
+            <summary>
+            Handler of the state's previous state.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.Program">
+            <summary>
+            Class used to init the game and make the initial call to the GameController.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.View.Commands">
+            <summary>
+            Class with a description of all commmands available to the user.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.View.Messages">
+            <summary>
+            Class with a description of all messages the game uses to create the feedback to the user.
+            </summary>
+        </member>
+        <member name="T:StorytellingConsoleAdventures.View.Parser">
+            <summary>
+            Class that verifies if the user did not input an invalid command.
+            </summary>
+            
+        </member>
+    </members>
+</doc>

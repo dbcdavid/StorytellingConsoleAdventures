@@ -7,11 +7,10 @@ using StorytellingConsoleAdventures.View;
 
 namespace StorytellingConsoleAdventures.Model
 {
-    /*
-     * Item is the class that describes objects that the player may find and eventually use
-     * It contains a name, its current location, an effect, which is a function name called when the item is used, 
-     * and an array of the parameters used in the effect call
-     */
+    /// <summary>
+    /// Item is the class that describes objects that the player may find and eventually use
+    /// It contains a name, and an effect, which is a function name called when the item is used
+    /// </summary>
     class Item
     {
         private string name = "";
@@ -23,6 +22,15 @@ namespace StorytellingConsoleAdventures.Model
             this.effect = effect;
         }
 
+        /// <summary>
+        /// Calls the function correponding to the effect of the item.
+        /// This special call uses c# reflection. This was chosen to ease future implementations. If the designer wishes to create new items with different effects,
+        /// the programmer will only need to create a function with those effects' name.
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the effect function was executed.
+        /// A string that contains the action description
+        /// </returns>
         public bool Use(Object[] parameters, ref string message)
         {
             try
@@ -41,13 +49,19 @@ namespace StorytellingConsoleAdventures.Model
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 message = name + " " + Messages.NOUSEMESSAGE;
                 return false;
             }
         }
 
+        /// <summary>
+        /// This is the sword function. It kill the target given as parameter by reducing its life points to 0
+        /// </summary>
+        /// <returns>
+        /// A string containing the message of the action
+        /// </returns>
         public string Attack(Object actorObject, Object targetEntity)
         {
             Entity actor = (Entity)actorObject;
@@ -65,6 +79,12 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
+        /// <summary>
+        /// This is the "Key" function. It unlocks the door which is the obstacle to open the place where the sword is.
+        /// </summary>
+        /// <returns>
+        /// A string containing the message of the action.
+        /// </returns>
         public string Unlock(Object actorObject, Object targetEntity)
         {
             Entity actor = (Entity)actorObject;
@@ -84,6 +104,9 @@ namespace StorytellingConsoleAdventures.Model
             return string.Empty;
         }
 
+        /// <summary>
+        /// Handler of the item's name.
+        /// </summary>
         public string Name
         {
             get
@@ -92,6 +115,9 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
+        /// <summary>
+        /// Handler of the item's effect.
+        /// </summary>
         public string Effect
         {
             get

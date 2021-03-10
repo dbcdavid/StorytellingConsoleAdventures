@@ -5,6 +5,9 @@ using StorytellingConsoleAdventures.Model;
 
 namespace StorytellingConsoleAdventures.Controller
 {
+    /// <summary>
+    /// Class that contains "saveable" version of the World class
+    /// </summary>
     class WorldSave
     {
         public List<LocationSave> map = new List<LocationSave>();
@@ -16,6 +19,9 @@ namespace StorytellingConsoleAdventures.Controller
         public string ending = "";
     }
 
+    /// <summary>
+    /// Class that contains "saveable" version of the Location class
+    /// </summary>
     class LocationSave
     {
         public string name = "";
@@ -24,6 +30,9 @@ namespace StorytellingConsoleAdventures.Controller
         public Dictionary<string, PathSave> paths = new Dictionary<string, PathSave>();
     }
 
+    /// <summary>
+    /// Class that contains "saveable" version of the LocationPath class
+    /// </summary>
     class PathSave
     {
         public string location1 = "";
@@ -31,6 +40,9 @@ namespace StorytellingConsoleAdventures.Controller
         public ObstacleSave obstacleSave = null;
     }
 
+    /// <summary>
+    /// Class that contains "saveable" version of the Obstacle class
+    /// </summary>
     class ObstacleSave
     {
         public string name = "";
@@ -39,12 +51,18 @@ namespace StorytellingConsoleAdventures.Controller
         public string solution = null;
     }
 
+    /// <summary>
+    /// Class that contains "saveable" version of the Item class
+    /// </summary>
     class ItemSave
     {
         public string name;
         public string effect;
     }
 
+    /// <summary>
+    /// Class that contains "saveable" version of the Entity class
+    /// </summary>
     class EntitySave
     {
         public string location = null;
@@ -53,6 +71,9 @@ namespace StorytellingConsoleAdventures.Controller
         public List<string> items = new List<string>();
     }
 
+    /// <summary>
+    /// Class that contains "saveable" version of the Monster class
+    /// </summary>
     class MonsterSave
     {
         public string location = null;

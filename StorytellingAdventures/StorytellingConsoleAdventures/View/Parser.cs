@@ -4,6 +4,10 @@ using System.Text;
 
 namespace StorytellingConsoleAdventures.View
 {
+    /// <summary>
+    /// Class that verifies if the user did not input an invalid command.
+    /// </summary>
+    /// 
     static class Parser
     {
         public static bool ParseAction(string line, ref string[] tokens, ref string message)

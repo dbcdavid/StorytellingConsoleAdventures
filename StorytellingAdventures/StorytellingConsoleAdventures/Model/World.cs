@@ -5,12 +5,17 @@ using StorytellingConsoleAdventures.View;
 
 namespace StorytellingConsoleAdventures.Model
 {
+    /// <summary>
+    /// This class is responsible for holding the attributes of worlds, each world representing an entire map and or situation in time.
+    /// It contains the texts of introduction and ending, all the locations and items, references to the player and monster
+    /// and a variable (playeractioncount) which is used to verify if the monster must act.
+    /// </summary>
     class World
     {
         private string introduction = "";
         private string ending = "";
-        private List<Location> map = null;
-        private List<Item> items = null;
+        private Dictionary<string, Location> map = null;
+        private Dictionary<string, Item> items = null;
         private Player player = null;
         private Monster monster = null;
         private int playerActionCount = 0;
@@ -18,15 +23,24 @@ namespace StorytellingConsoleAdventures.Model
         public World(Player player)
         {
             this.player = player;
-            items = new List<Item>();
-            map = new List<Location>();
+            items = new Dictionary<string, Item>(StringComparer.OrdinalIgnoreCase);
+            map = new Dictionary<string, Location>(StringComparer.OrdinalIgnoreCase);
         }
 
+        /// <summary>
+        /// Increases the current playeractioncount. It has a maximum amount determined by the constants. If the maximum is reached, the value resets to zero.
+        /// </summary>
         public void IncreasePlayerActionCount()
         {
             playerActionCount = (playerActionCount + 1) % Constants.MAXACTIONCOUNT;
         }
 
+        /// <summary>
+        /// Checks if the monster must act now.
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the monster must act.
+        /// </returns>
         public bool IsMonsterTurn()
         {
             if (playerActionCount == 0)
@@ -37,47 +51,78 @@ namespace StorytellingConsoleAdventures.Model
             return false;
         }
 
+        /// <summary>
+        /// Adds a location to the list of locations that can be found in the world.
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the location was added (it is not possible to have two locations of the same name, which must be handled during the world creation).
+        /// </returns>
         public bool AddLocation(Location newLocation)
         {
-            foreach(Location location in map)
+            if (map.ContainsKey(newLocation.Name) || newLocation.Name.Length == 0)
             {
-                if (location.Name.Equals(newLocation.Name))
-                {
-                    return false;
-                }
+                return false;
             }
 
-            map.Add(newLocation);
+            map.Add(newLocation.Name, newLocation);
             return true;
         }
 
+        /// <summary>
+        /// Adds an item to the dictionary of items that can be found in the world.
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the item was added (it is not possible to have two items of the same name, which must be handled during the world creation).
+        /// </returns>
         public bool AddItem(Item newItem)
         {
-            foreach (Item item in items)
+            if (items.ContainsKey(newItem.Name) || newItem.Name.Length == 0)
             {
-                if (item.Name.Equals(newItem.Name))
-                {
-                    return false;
-                }
+                return false;
             }
 
-            items.Add(newItem);
+            items.Add(newItem.Name, newItem);
             return true;
         }
 
+        /// <summary>
+        /// Searches for the given item
+        /// </summary>
+        /// <returns>
+        /// An instance to the item if it is found. Otherwise returns null.
+        /// </returns>
         public Item GetItem(string itemName)
         {
-            foreach(Item item in items)
+            if (items.ContainsKey(itemName))
             {
-                if (item.Name.ToLower().Equals(itemName))
-                {
-                    return item;
-                }
+                return items[itemName];
             }
 
             return null;
         }
 
+        /// <summary>
+        /// Searches for the given location
+        /// </summary>
+        /// <returns>
+        /// An instance to the location if it is found. Otherwise returns null.
+        /// </returns>
+        public Location GetLocation(string locationName)
+        {
+            if (map.ContainsKey(locationName))
+            {
+                return map[locationName];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Checks if two given entities are in locations connected with a path
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the entities are in connected locations
+        /// </returns>
         public static bool CheckEntityProximity(Entity entity1, Entity entity2)
         {
             Location location1 = entity1.CurrentLocation;
@@ -88,6 +133,15 @@ namespace StorytellingConsoleAdventures.Model
             return isNear;
         }
 
+        /// <summary>
+        /// Changes the world with the given action consequences.
+        /// For each possible command there is a specific set of instructions to follow.
+        /// If the action "use" is received, this function prepares a set of generic objects for the C# reflection function used inside the Item class.
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the action was executed
+        /// A string message with the description of the execution attempt.
+        /// </returns>
         public bool ExecuteAction(Entity actor, string[] actionDescription, ref string message)
         {
             bool result = false;
@@ -170,10 +224,17 @@ namespace StorytellingConsoleAdventures.Model
             return result;
         }
 
+        /// <summary>
+        /// Attempts to change the location of the given actor with the given direction
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if the action was executed
+        /// A string message with the description of the move attempt.
+        /// </returns>
         private bool MoveEntity(Entity entity, string direction, ref string message)
         {
             Location entityLocation = entity.CurrentLocation;
-            Path path = entityLocation.GetPath(direction);
+            LocationPath path = entityLocation.GetPath(direction);
 
             if (path != null)
             {
@@ -205,7 +266,10 @@ namespace StorytellingConsoleAdventures.Model
             return false;
         }
 
-        public List<Item> Items
+        /// <summary>
+        /// Handler of the world's items.
+        /// </summary>
+        public Dictionary<string, Item> Items
         {
             get
             {
@@ -213,7 +277,10 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
-        public List<Location> Map
+        /// <summary>
+        /// Handler of the world's locations.
+        /// </summary>
+        public Dictionary<string, Location> Map
         {
             get
             {
@@ -221,6 +288,9 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
+        /// <summary>
+        /// Handler of the world's player instance.
+        /// </summary>
         public Player PlayerCharacter
         {
             get
@@ -229,6 +299,9 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
+        /// <summary>
+        /// Handler of the world's monster instance.
+        /// </summary>
         public Monster MonsterCharacter
         {
             set
@@ -242,6 +315,9 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
+        /// <summary>
+        /// Handler of the world's counting of the player turn.
+        /// </summary>
         public int PlayerActionCount
         {
             set
@@ -254,6 +330,9 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
+        /// <summary>
+        /// Handler of the world's introduction text.
+        /// </summary>
         public string Introduction
         {
             get
@@ -266,6 +345,9 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
+        /// <summary>
+        /// Handler of the world's ending text.
+        /// </summary>
         public string Ending
         {
             get

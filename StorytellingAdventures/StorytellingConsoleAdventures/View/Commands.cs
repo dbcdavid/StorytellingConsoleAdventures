@@ -4,6 +4,9 @@ using System.Text;
 
 namespace StorytellingConsoleAdventures.View
 {
+    /// <summary>
+    /// Class with a description of all commmands available to the user.
+    /// </summary>
     static class Commands
     {
         public static string AFIRMATIVE = "y";

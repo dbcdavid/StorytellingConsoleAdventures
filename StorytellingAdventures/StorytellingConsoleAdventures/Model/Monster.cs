@@ -5,6 +5,12 @@ using StorytellingConsoleAdventures.Planner;
 
 namespace StorytellingConsoleAdventures.Model
 {
+    /// <summary>
+    /// Monster is a class that inherits from entity and describes the parameters of the monster that will try to kill the player
+    /// It contains a knowledge, which is a copy of the world (but in future iterations it could be different to represent that it may make errors),
+    /// a description of planning method, which can be random (it will walk randomly) or chase (it will chase the player),
+    /// and a variable that generates the random numbers necessary for the random behavior.
+    /// </summary>
     class Monster : Entity
     {
         public enum Planning
@@ -26,6 +32,14 @@ namespace StorytellingConsoleAdventures.Model
             items = new List<Item>();
         }
 
+        /// <summary>
+        /// Gets the monster's planned next action.
+        /// </summary>
+        /// <returns>
+        /// A bool that indicates if it was capable of finding an action to execute, and
+        /// an array of tokens that describe the monster's intended action.
+        /// It returns a list of tokens to make it similar to the player's input.
+        /// </returns>
         public bool GetNextAction(ref string[] actionTokens)
         {
             actionTokens = new string[1];
@@ -41,6 +55,15 @@ namespace StorytellingConsoleAdventures.Model
             }
         }
 
+        /// <summary>
+        /// Plans the action the monster must execute. The function creates a search tree, performing a broad search to get the best action. 
+        /// Given the current map size this approach should not cause a perceivable performance problem.
+        /// One optimization was implemented: the planning avoids states already visited.
+        /// The planning process currently only considers the move action. In future iterations it could include different actions such as get items.
+        /// </summary>
+        /// <returns>
+        /// A string that describes the chosen action. If no action is found, it returns an empty string.
+        /// </returns>
         private string Think()
         {
             if (planning == Planning.RANDOM)
@@ -104,6 +127,9 @@ namespace StorytellingConsoleAdventures.Model
             return String.Empty;
         }
 
+        /// <summary>
+        /// Handler of the monster's planning method.
+        /// </summary>
         public Planning PlanningMethod
         {
             get

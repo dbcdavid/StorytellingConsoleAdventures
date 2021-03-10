@@ -5,6 +5,11 @@ using StorytellingConsoleAdventures.Model;
 
 namespace StorytellingConsoleAdventures.Planner
 {
+    /// <summary>
+    /// Class used by the monster's planning method to register the possible situations.
+    /// It contains a description of the action used to reach it, a reference to the previous state, a list of the reacheable states,
+    /// and the location that is being planned.
+    /// </summary>
     class State
     {
         private string previousAction = String.Empty;
@@ -18,11 +23,20 @@ namespace StorytellingConsoleAdventures.Planner
             plannedLocation = location;
         }
 
+        /// <summary>
+        /// Adds a state to the list of reacheable states.
+        /// </summary>
         public void AddNextState(State state)
         {
             nextStates.Add(state);
         }
 
+        /// <summary>
+        /// Goes up to the initial state to check which is the first action to be executed to reach this state.
+        /// </summary>
+        /// <returns>
+        /// A string with the description of the action that need to be executed to reach this state.
+        /// </returns>
         public string GetFirstAction()
         {
             if (previousState != null)
@@ -43,6 +57,9 @@ namespace StorytellingConsoleAdventures.Planner
             }
         }
 
+        /// <summary>
+        /// Handler of the state's location.
+        /// </summary>
         public Location PlannedLocation
         {
             get
@@ -51,6 +68,9 @@ namespace StorytellingConsoleAdventures.Planner
             }
         }
 
+        /// <summary>
+        /// Handler of the state's previous action.
+        /// </summary>
         public string PreviousAction
         {
             get
@@ -64,6 +84,9 @@ namespace StorytellingConsoleAdventures.Planner
             }
         }
 
+        /// <summary>
+        /// Handler of the state's previous state.
+        /// </summary>
         public State PreviousState
         {
             get

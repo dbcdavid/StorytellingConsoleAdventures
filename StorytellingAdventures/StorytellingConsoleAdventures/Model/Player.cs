@@ -4,10 +4,11 @@ using System.Text;
 
 namespace StorytellingConsoleAdventures.Model
 {
-    /*
-     * Player is the class that describes the relevant attributes of the player character
-     * It contains the player's current life points, current location and the items he is carrying
-     */
+    /// <summary>
+    /// Player is the class that describes the relevant attributes of the player character
+    /// It inherits all attributes from the Entity class
+    /// </summary>
+    
     class Player : Entity
     {
         public Player (string name, int lifePoints, Location location)
