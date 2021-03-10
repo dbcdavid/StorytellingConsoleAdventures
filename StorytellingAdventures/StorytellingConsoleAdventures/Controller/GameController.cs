@@ -10,6 +10,9 @@ namespace StorytellingConsoleAdventures.Controller
         private Player player = null;
         private Monster monster = null;
         private bool debug = true;
+        private Location previousPlayerLocation = null;
+        private Location currentPlayerLocation = null;
+        private string previousCommand = "";
 
         public GameController()
         {
@@ -24,6 +27,13 @@ namespace StorytellingConsoleAdventures.Controller
 
             while (commandLine != Commands.EXIT)
             {
+                currentPlayerLocation = world.PlayerCharacter.CurrentLocation;
+                if (currentPlayerLocation != previousPlayerLocation)
+                {
+                    WriteLocationDescription();
+                    previousPlayerLocation = currentPlayerLocation;
+                }
+
                 WritePlayerMonsterCondition();
 
                 if (debug)
@@ -173,6 +183,13 @@ namespace StorytellingConsoleAdventures.Controller
             return false;
         }
 
+        private void WriteLocationDescription()
+        {
+            Location location = player.CurrentLocation;
+            Console.WriteLine(location.Name.ToUpper());
+            Console.WriteLine(location.Description);
+        }
+
         private void WriteMonsterAttack()
         {
             Console.WriteLine(Messages.MONSTERATTACK);
@@ -193,7 +210,9 @@ namespace StorytellingConsoleAdventures.Controller
         private void WritePlayerMonsterCondition()
         {
             bool isPlayerNearMonster = World.CheckEntityProximity(player, monster);
-
+            ConsoleColor defaultColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            
             if (isPlayerNearMonster)
             {
                 Console.WriteLine(Messages.PLAYERNEARMONSTER);
@@ -202,6 +221,7 @@ namespace StorytellingConsoleAdventures.Controller
             {
                 Console.WriteLine(Messages.PLAYERWITHMONSTER);
             }
+            Console.ForegroundColor = defaultColor;
         }
 
         private void WritePlayerLifeCondition()
@@ -222,6 +242,16 @@ namespace StorytellingConsoleAdventures.Controller
             player = world.PlayerCharacter;
             monster = world.MonsterCharacter;
             Console.Clear();
+            WriteWorldIntroduction();
+            Console.WriteLine();
+        }
+
+        private void WriteWorldIntroduction()
+        {
+            if (world != null)
+            {
+                Console.WriteLine(world.Introduction);
+            }
         }
 
         private bool HandleGameOver()
@@ -280,17 +310,30 @@ namespace StorytellingConsoleAdventures.Controller
 
         static World InitializeTestScenario()
         {
-            Location a1 = new Location("a1");
-            Location a2 = new Location("a2");
-            Location a3 = new Location("a3");
+            Location a1 = new Location("Entrance");
+            Location a2 = new Location("Statue Corridor");
+            Location a3 = new Location("Turning Point");
+            a1.Description = "This is the dungeon entrance.\nFrom here, you can see a corridor to the east and a corridor to the south.";
+            a2.Description = "As you reach this corridor, you notice a variety of statues. Probably they belonged to the mage that was living here long ago." +
+                             "\nFrom here, the corridor continues to the west and to the east.";
+            a3.Description = "Here the corridor continues to the south and to the west.";
 
-            Location b1 = new Location("b1");
-            Location b2 = new Location("b2");
-            Location b3 = new Location("b3");
+            Location b1 = new Location("Main Corridor");
+            Location b2 = new Location("Mage's Chamber");
+            Location b3 = new Location("Portrait Corridor");
+            b1.Description = "As you reach this corridor, you notice a door to the east and, incredibly enought, a mat standing on the ground in front of it." +
+                             "\nFrom here, the corridor continues to the north and to the south.";
+            b2.Description = "You enter the main room of the dungeon and notice the collection of magical items at display.";
+            b3.Description = "Walking through this corridor, you see a sequence of portraits. Probably the mage's entire familty. You can go north or south.";
 
-            Location c1 = new Location("c1");
-            Location c2 = new Location("c2");
-            Location c3 = new Location("c3");
+            Location c1 = new Location("Turning Point");
+            Location c2 = new Location("Foul Corridor");
+            Location c3 = new Location("Turning Point");
+            c1.Description = "Here the corridor continues to the north and to the east.";
+            c2.Description = "Apparently, this was the place where the monster stayed for the most of his time, because you can sense a putrid stench." +
+                             "\nYou can go east and west from here.";
+            c3.Description = "Here the corridor continues to the north and to the west.";
+
 
             Path a1a2 = new Path(a1, a2);
             Path a1b1 = new Path(a1, b1);
@@ -338,6 +381,15 @@ namespace StorytellingConsoleAdventures.Controller
             Player player = new Player("Player", 3, a1);
 
             World world = new World(player);
+            world.Introduction = "IN SEARCH OF POWER\n" +
+                "                 \nDays passed after you decided to get the ring of anger." +
+                                 "\nYou needed it in order to have your revenge against that stupid princess and those noble bastards." +
+                                 "\nHowever, it would not be an easy task to get the ring. It was in possession of a quite dangerous dragon." +
+                                 "\nOne whose scales could only be affected by certain weapons and you found out that one of those weapons was lost inside an old mage's house, now pratically a dungeon." +
+                                 "\nYou finally found the dungeon, in the middle of eastern mountains, but before entering, you remembered the legends about a guardian monster" +
+                                 "that could be living inside." +
+                                 "\nOnly with the weapon that you are searching, you would be able to hurt the creature. Without it, the best you can do is run." +
+                                 "\nWith those words in mind, you enter the first room.";
             world.AddLocation(a1);
             world.AddLocation(a2);
             world.AddLocation(a3);

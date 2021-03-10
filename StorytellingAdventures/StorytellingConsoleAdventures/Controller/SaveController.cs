@@ -7,60 +7,6 @@ using StorytellingConsoleAdventures.View;
 
 namespace StorytellingConsoleAdventures.Controller
 {
-    class WorldSave
-    {
-        public List<LocationSave> map = new List<LocationSave>();
-        public List<ItemSave> items = new List<ItemSave>();
-        public EntitySave player = null;
-        public MonsterSave monster = null;
-        public int playerActionCount = 0;
-    }
-
-    class LocationSave
-    {
-        public string name = "";
-        public List<string> items = new List<string>();
-        public Dictionary<string, PathSave> paths = new Dictionary<string, PathSave>();
-    }
-
-    class PathSave
-    {
-        public string location1 = "";
-        public string location2 = "";
-        public ObstacleSave obstacleSave = null;
-    }
-
-    class ObstacleSave
-    {
-        public string name = "";
-        public string condition = "";
-        public bool solved = false;
-        public string solution = null;
-    }
-
-    class ItemSave
-    {
-        public string name;
-        public string effect;
-    }
-
-    class EntitySave
-    {
-        public string location = null;
-        public string name = string.Empty;
-        public int lifePoints = 0;
-        public List<string> items = new List<string>();
-    }
-
-    class MonsterSave
-    {
-        public string location = null;
-        public string name = string.Empty;
-        public int lifePoints = 0;
-        public List<string> items = new List<string>();
-        public Monster.Planning planning;
-    }
-
     static class SaveController
     {
         private static string FILENAME = "save.json";
@@ -106,6 +52,7 @@ namespace StorytellingConsoleAdventures.Controller
         {
             WorldSave worldSave = new WorldSave();
             worldSave.playerActionCount = world.PlayerActionCount;
+            worldSave.introduction = world.Introduction;
 
             foreach (Item item in world.Items)
             {
@@ -145,6 +92,7 @@ namespace StorytellingConsoleAdventures.Controller
             {
                 LocationSave locationSave = new LocationSave();
                 locationSave.name = location.Name;
+                locationSave.description = location.Description;
 
                 foreach (Item item in location.Items)
                 {
@@ -193,6 +141,7 @@ namespace StorytellingConsoleAdventures.Controller
             foreach (LocationSave locationSave in mapSave)
             {
                 Location location = new Location(locationSave.name);
+                location.Description = locationSave.description;
                 map.Add(location);
 
                 if (location.Name.Equals(playerSave.location))
@@ -208,6 +157,7 @@ namespace StorytellingConsoleAdventures.Controller
 
             Player player = new Player(playerSave.name, playerSave.lifePoints, playerLocation);
             World world = new World(player);
+            world.Introduction = worldSave.introduction;
             Monster monster = new Monster(monsterSave.name, monsterSave.lifePoints, monsterLocation, world, monsterSave.planning);
             world.PlayerActionCount = worldSave.playerActionCount;
 

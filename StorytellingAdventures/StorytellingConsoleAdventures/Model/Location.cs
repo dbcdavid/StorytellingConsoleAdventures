@@ -12,7 +12,9 @@ namespace StorytellingConsoleAdventures.Model
     {
         private Dictionary<string, Path> paths;
         private string name = "";
+        private string description = "";
         private List<Item> items = null;
+
 
         public Location(string name)
         {
@@ -154,6 +156,18 @@ namespace StorytellingConsoleAdventures.Model
             get
             {
                 return paths;
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+            set
+            {
+                description = value;
             }
         }
     }

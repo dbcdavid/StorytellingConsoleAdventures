@@ -24,7 +24,6 @@ namespace StorytellingConsoleAdventures.Controller
         {
             ShowWindow(ThisConsole, MAXIMIZE);
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
-            Console.ReadLine();
         }
     }
 }

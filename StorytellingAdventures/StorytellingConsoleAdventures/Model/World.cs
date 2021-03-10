@@ -7,6 +7,7 @@ namespace StorytellingConsoleAdventures.Model
 {
     class World
     {
+        private string introduction = "";
         private List<Location> map = null;
         private List<Item> items = null;
         private Player player = null;
@@ -249,6 +250,18 @@ namespace StorytellingConsoleAdventures.Model
             get
             {
                 return playerActionCount;
+            }
+        }
+
+        public string Introduction
+        {
+            get
+            {
+                return introduction;
+            }
+            set
+            {
+                introduction = value;
             }
         }
     }
