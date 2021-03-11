@@ -29,7 +29,7 @@ namespace StorytellingConsoleAdventures.Model
         /// </summary>
         /// <returns>
         /// A bool that indicates if the effect function was executed.
-        /// A string that contains the action description
+        /// A string that contains the results of the action attempt
         /// </returns>
         public bool Use(Object[] parameters, ref string message)
         {
@@ -39,7 +39,11 @@ namespace StorytellingConsoleAdventures.Model
                 MethodInfo theMethod = thisType.GetMethod(effect);
                 message = (string)theMethod.Invoke(this, parameters);
 
-                if (message.Length > 0)
+                if (message.Equals(Messages.NOACTMONSTERMESSAGE))
+                {
+                    return false;
+                }
+                else if (message.Length > 0)
                 {
                     return true;
                 }
@@ -88,8 +92,14 @@ namespace StorytellingConsoleAdventures.Model
         public string Unlock(Object actorObject, Object targetEntity)
         {
             Entity actor = (Entity)actorObject;
+            Entity monster = (Entity)targetEntity;
             Location location = actor.CurrentLocation;
             List<Obstacle> obstacles = location.GetObstacles();
+
+            if (actor.CurrentLocation == monster.CurrentLocation)
+            {
+                return Messages.NOACTMONSTERMESSAGE;
+            }
 
             foreach (Obstacle obstacle in obstacles)
             {

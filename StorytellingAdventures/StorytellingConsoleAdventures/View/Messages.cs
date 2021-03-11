@@ -10,6 +10,7 @@ namespace StorytellingConsoleAdventures.View
     static class Messages
     {
         public static string INVALIDCOMMAND = "is not a valid action";
+        public static string NOACTMONSTERMESSAGE = "Are you crazy? You cannot do that while the monster is here!";
 
         public static string NOUSEMESSAGE = "cannot be used here";
         public static string MOVEMESSAGE = "%entity went from %from to %to";

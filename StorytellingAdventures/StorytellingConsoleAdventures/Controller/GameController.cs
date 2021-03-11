@@ -59,7 +59,7 @@ namespace StorytellingConsoleAdventures.Controller
                     }
 
                     bool takeDamage = TakeDamageCondition();
-                    bool executed = world.ExecuteAction(player, commandTokens, ref message);
+                    bool executed = world.ExecuteAction(player, IsPlayerWithMonster(), commandTokens, ref message);
                     
                     if (executed)
                     {
@@ -109,7 +109,7 @@ namespace StorytellingConsoleAdventures.Controller
                             bool hasAction = monster.GetNextAction(ref commandTokens);
                             if (hasAction)
                             {
-                                world.ExecuteAction(monster, commandTokens, ref message);
+                                world.ExecuteAction(monster, IsPlayerWithMonster(), commandTokens, ref message);
 
                                 if (Constants.DEBUG)
                                 {

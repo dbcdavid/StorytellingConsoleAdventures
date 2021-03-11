@@ -142,7 +142,7 @@ namespace StorytellingConsoleAdventures.Model
         /// A bool that indicates if the action was executed
         /// A string message with the description of the execution attempt.
         /// </returns>
-        public bool ExecuteAction(Entity actor, string[] actionDescription, ref string message)
+        public bool ExecuteAction(Entity actor, bool isPlayerWithMonster, string[] actionDescription, ref string message)
         {
             bool result = false;
             if (actionDescription.Length > 0)
@@ -157,6 +157,12 @@ namespace StorytellingConsoleAdventures.Model
                     }
                     else if (actionName.Equals(Commands.SEARCH))
                     {
+                        if (actor == player && isPlayerWithMonster)
+                        {
+                            message = Messages.NOACTMONSTERMESSAGE;
+                            return false;
+                        }
+
                         List<Item> itemsFound = actor.CurrentLocation.Items;
 
                         if (itemsFound.Count > 0)
@@ -176,6 +182,12 @@ namespace StorytellingConsoleAdventures.Model
                     }
                     else if (actionName.Equals(Commands.GET))
                     {
+                        if (actor == player && isPlayerWithMonster)
+                        {
+                            message = Messages.NOACTMONSTERMESSAGE;
+                            return false;
+                        }
+
                         string target = actionDescription[1];
                         bool gotItem = actor.CurrentLocation.RemoveItem(target);
 
