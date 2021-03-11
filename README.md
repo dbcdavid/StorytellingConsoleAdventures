@@ -59,5 +59,7 @@ Algumas considerações sobre o estado atual:
    
    Gostaria de ter feito um editor de mapas também pra colocar mapas em arquivos separados, mas infelizmente não consegui nem começar. O código vem com uma função que cria um mapa para que ele possa ser testado. O nome da função é "InitializeTestScenario" e ela está dentro do GameController.cs
    
+   O mapa de testes é basicamente uma grid 3x3, onde cada sala se conecta com as salas adjacentes, exceto a sala do meio, que é onde está a espada. Essa sala se conecta apenas com a sala à esquerda dela, que por sua vez é onde se encontra a chave. Em outras palavras, na sala onde se encontra a porta trancada, também se encontra a chave. O jogador inicia no canto superior esquerdo e o monstro no canto inferior direito.
+   
    
    
