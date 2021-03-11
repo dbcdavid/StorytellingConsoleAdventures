@@ -6,13 +6,14 @@ VERSÃO 1.0!
 Conforme requisitado, o jogo é uma aventura de linha de comando. Ele é representado e jogado todo no console. No jogo, o herói se encontra num cenário onde é perseguido lentamente por um inimigo. O objetivo é encontrar uma espada e derrotá-lo.
 
 Sobre os requisitos:
+
   ● O jogo deve ter um cenário composto de salas interconectadas; (OK)
   ● O jogador deve ser capaz de:
     ○ Mover-se entre as salas (comandos north, south, west, east); (OK)
     ○ Procurar por itens nas salas (search); (OK)
     ○ Carregar itens encontrados (get nome_do_item); (OK)
     ○ Usar itens carregados (use nome_do_item); (OK)
-        Para as próximas iterações ainda vou colocar um comando "help" pra retornar os comandos disponíveis em um dado momento
+      Para as próximas iterações ainda vou colocar um comando "help" pra retornar os comandos disponíveis em um dado momento
   ● O jogador deve possuir pontos de vida; (OK)
   ● O jogador deve ser avisado de que sente a presença do inimigo sempre que estiver numa sala adjacente a do inimigo (You feel an evil presence nearby); (OK) 
   ● Uma das salas deve conter o item espada; (OK)
